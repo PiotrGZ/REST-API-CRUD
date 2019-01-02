@@ -1,4 +1,5 @@
-package com.piotrgz.restapi.models;
+package com.piotrgz.restapi.model;
+
 
 import javax.persistence.*;
 

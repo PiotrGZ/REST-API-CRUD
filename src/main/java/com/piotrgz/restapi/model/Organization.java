@@ -1,4 +1,4 @@
-package com.piotrgz.restapi.models;
+package com.piotrgz.restapi.model;
 
 import javax.persistence.*;
 import java.util.List;
@@ -7,10 +7,13 @@ import java.util.List;
 public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
     private String name;
     @OneToMany
     private List<ConferenceRoomReservation> conferenceRoomReservationCollection;
+
+    public Organization() {
+    }
 
     public List<ConferenceRoomReservation> getConferenceRoomReservationCollection() {
         return conferenceRoomReservationCollection;
@@ -21,11 +24,11 @@ public class Organization {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
