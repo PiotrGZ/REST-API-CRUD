@@ -30,7 +30,7 @@ public class ConferenceRoomController {
 
         String conferenceRoomName = conferenceRoom.getName();
 
-        if (isNameNotUsed(conferenceRoomName)) {
+        if (isNameValid(conferenceRoomName)) {
             conferenceRoomService.save(conferenceRoom);
             return ResponseEntity.ok().build();
         } else {
@@ -60,11 +60,11 @@ public class ConferenceRoomController {
 
         String organizationName = conferenceRoom.getName();
 
-        if (isConferenceRoomPresent(id) && isNameNotUsed(organizationName)) {
+        if (isConferenceRoomPresent(id) && isNameValid(organizationName)) {
             conferenceRoomService.update(id, conferenceRoom);
             return ResponseEntity.ok().build();
         } else
-            return ResponseEntity.badRequest().body("Conference room with ID: " + id + " doesn't exist or name is already used");
+            return ResponseEntity.badRequest().body("Conference room with ID: " + id + " doesn't exist or name is not valid");
     }
 
 
@@ -73,10 +73,9 @@ public class ConferenceRoomController {
     }
 
 
-    private boolean isNameNotUsed(String name) {
+    private boolean isNameValid(String name) {
 
-        return !conferenceRoomService.getAll()
-                .stream()
-                .anyMatch(t -> t.getName().equals(name));
+        return !name.trim().isEmpty() &&
+                !conferenceRoomService.getAll().stream().anyMatch(t -> t.getName().equals(name));
     }
 }

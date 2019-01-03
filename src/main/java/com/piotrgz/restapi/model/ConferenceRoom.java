@@ -1,6 +1,8 @@
 package com.piotrgz.restapi.model;
 
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;

@@ -5,14 +5,13 @@ import com.piotrgz.restapi.model.Organization;
 
 import com.piotrgz.restapi.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/organization")
@@ -28,9 +27,9 @@ public class OrganizationController {
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody Organization organization) {
 
-        if(isNameValid(organization.getName()))
+        if (isNameValid(organization.getName()))
             organizationService.save(organization);
-            return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
@@ -50,10 +49,13 @@ public class OrganizationController {
 
 
     @PatchMapping
-    public ResponseEntity update(@RequestParam int id, @RequestBody Organization organization) {
-
-        organizationService.update(id, organization);
-        return ResponseEntity.ok().build();
+    public ResponseEntity update(@RequestParam int id, @Valid @RequestBody Organization organization) {
+        if (isOrganizationPresent(id) && isNameValid(organization.getName())) {
+            organizationService.update(id, organization);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().body("Organization with id " + id + " has not been found, or name is not valid");
+        }
     }
 
     private boolean isOrganizationPresent(int id) {
@@ -61,8 +63,7 @@ public class OrganizationController {
     }
 
     private boolean isNameValid(String name) {
-        if (name.trim().isEmpty())
-            return false;
-        return true;
+        return !name.trim().isEmpty() &&
+                !organizationService.getAll().stream().anyMatch(t -> t.getName().equals(name));
     }
 }
