@@ -29,13 +29,15 @@ public class OrganizationController {
 
     @PostMapping
     public ResponseEntity save(@RequestBody Organization organization) {
+
         Optional<String> organizationNullableName = Optional.ofNullable(organization.getName());
-        String organizationName=organizationNullableName.orElse(NOT_VALID_NAME_BY_DEFAULT);
+        String organizationName = organizationNullableName.orElse(NOT_VALID_NAME_BY_DEFAULT);
+
         if (isNameNotUsed(organizationName) && isNameValid(organizationName)) {
             organizationService.save(organization);
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Name not valid");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Name is not valid");
         }
     }
 
@@ -46,23 +48,41 @@ public class OrganizationController {
     }
 
     @DeleteMapping
-    public void delete(@RequestParam int id) {
-        organizationService.delete(id);
+    public ResponseEntity delete(@RequestParam int id) {
+        if (isOrganizationPresent(id)) {
+            organizationService.delete(id);
+            return ResponseEntity.ok().build();
+        } else
+            return ResponseEntity.badRequest().body("Organization with id " + id + " has not been found");
     }
+
 
     @PatchMapping
-    public void update(@RequestParam int id, @RequestBody Organization organization) {
-        organizationService.update(id, organization);
+    public ResponseEntity update(@RequestParam int id, @RequestBody Organization organization) {
+
+        Optional<String> organizationNullableName = Optional.ofNullable(organization.getName());
+        String organizationName = organizationNullableName.orElse(NOT_VALID_NAME_BY_DEFAULT);
+
+        if (isOrganizationPresent(id) && isNameValid(organizationName) && isNameNotUsed(organizationName)) {
+            organizationService.update(id, organization);
+            return ResponseEntity.ok().build();
+        } else
+            return ResponseEntity.badRequest().body("Organization with ID "+id+" doesn't exist or name is not valid");
     }
 
 
-    public boolean isNameNotUsed(String name) {
+    private boolean isOrganizationPresent(int id) {
+        return organizationService.getAll().stream().anyMatch(t -> ((Integer) t.getId()).equals(id));
+    }
+
+
+    private boolean isNameNotUsed(String name) {
         List<Organization> organizationList = organizationService.getAll();
         return !organizationList.stream()
                 .anyMatch(t -> t.getName().equals(name));
     }
 
-    public boolean isNameValid(String name) {
+    private boolean isNameValid(String name) {
         if (name.length() < MIN_NAME_LENGTH && name.length() > MAX_NAME_LENGTH)
             return false;
         if (name.trim().isEmpty())
