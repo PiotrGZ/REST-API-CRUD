@@ -1,6 +1,8 @@
 package com.piotrgz.restapi.model;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -8,12 +10,19 @@ public class ConferenceRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    @NotNull
+    private int id;
+    @NotNull(message = "Please provide name")
+    @Size(min = 2, max = 20, message = "Name should be between 2 and 20 characters")
     private String name;
-    private String OptionalId;
-    private int floor;
-    private boolean isAvailable;
-    private int numberOfSeats;
+    @NotNull(message = "Please provide floor number from 0 to 10")
+    @Max(value = 10, message ="Floor number must be less or equal 10")
+    @Min(value = 0, message = "Floor number must be greater or equal 0")
+    private Integer floor;
+    @NotNull(message = "Please provide valid availability")
+    private Boolean isAvailable;
+    @NotNull(message = "Please provide number of seats")
+    private Integer numberOfSeats;
     @OneToMany
     private List<ConferenceRoomReservation> conferenceRoomReservationCollection;
 
@@ -27,11 +36,11 @@ public class ConferenceRoom {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -42,35 +51,27 @@ public class ConferenceRoom {
         this.name = name;
     }
 
-    public String getOptionalId() {
-        return OptionalId;
-    }
-
-    public void setOptionalId(String optionalId) {
-        OptionalId = optionalId;
-    }
-
-    public int getFloor() {
+    public Integer getFloor() {
         return floor;
     }
 
-    public void setFloor(int floor) {
+    public void setFloor(Integer floor) {
         this.floor = floor;
     }
 
-    public boolean isAvailable() {
+    public Boolean isAvailable() {
         return isAvailable;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(Boolean available) {
         isAvailable = available;
     }
 
-    public int getNumberOfSeats() {
+    public Integer getNumberOfSeats() {
         return numberOfSeats;
     }
 
-    public void setNumberOfSeats(int numberOfSeats) {
+    public void setNumberOfSeats(Integer numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
     }
 }

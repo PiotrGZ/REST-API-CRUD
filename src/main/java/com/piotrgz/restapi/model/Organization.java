@@ -1,6 +1,8 @@
 package com.piotrgz.restapi.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -8,12 +10,12 @@ public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @NotNull(message = "Please provide name")
+    @Size(min = 2, max = 20, message = "Please provide name in range of 2-20 characters")
     private String name;
     @OneToMany
     private List<ConferenceRoomReservation> conferenceRoomReservationCollection;
 
-    public Organization() {
-    }
 
     public List<ConferenceRoomReservation> getConferenceRoomReservationCollection() {
         return conferenceRoomReservationCollection;
