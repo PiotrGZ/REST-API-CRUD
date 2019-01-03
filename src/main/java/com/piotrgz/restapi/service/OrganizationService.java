@@ -21,9 +21,8 @@ public class OrganizationService {
         this.organizationRepo = Objects.requireNonNull(organizationRepository);
     }
 
-    public ResponseEntity save(Organization organization) {
+    public void save(Organization organization) {
         organizationRepo.save(organization);
-        return ResponseEntity.ok().build();
     }
 
     public List<Organization> getAll() {
