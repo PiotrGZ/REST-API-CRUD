@@ -2,6 +2,9 @@ package com.piotrgz.restapi.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,8 +19,11 @@ public class Organization {
     @Size(min = 2, max = 20, message = "Please provide name in range of 2-20 characters")
     private String name;
     @OneToMany
+            (mappedBy = "organization", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ConferenceRoomReservation> conferenceRoomReservationCollection;
 
+    public Organization() {
+    }
 
     public List<ConferenceRoomReservation> getConferenceRoomReservationCollection() {
         return conferenceRoomReservationCollection;

@@ -4,7 +4,6 @@ import com.piotrgz.restapi.model.ConferenceRoom;
 
 import com.piotrgz.restapi.service.ConferenceRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +33,7 @@ public class ConferenceRoomController {
             conferenceRoomService.save(conferenceRoom);
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Name is not valid");
+            return ResponseEntity.badRequest().body("Name is not valid");
         }
     }
 
@@ -56,10 +55,7 @@ public class ConferenceRoomController {
 
     @PatchMapping
     public ResponseEntity update(@RequestParam int id, @Valid @RequestBody ConferenceRoom conferenceRoom) {
-
-
         String organizationName = conferenceRoom.getName();
-
         if (isConferenceRoomPresent(id) && isNameValid(organizationName)) {
             conferenceRoomService.update(id, conferenceRoom);
             return ResponseEntity.ok().build();

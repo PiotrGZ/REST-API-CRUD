@@ -4,12 +4,11 @@ import com.piotrgz.restapi.model.Organization;
 import com.piotrgz.restapi.repository.OrganizationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
 
-@RestController
+
 @Service
 public class OrganizationService {
 
@@ -37,5 +36,9 @@ public class OrganizationService {
 
     public void delete(int id) {
         organizationRepo.deleteById(id);
+    }
+
+    public  Organization findById(int id){
+        return organizationRepo.findById(id).get();
     }
 }

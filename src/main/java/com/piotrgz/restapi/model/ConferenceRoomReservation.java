@@ -1,7 +1,11 @@
 package com.piotrgz.restapi.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class ConferenceRoomReservation {
@@ -9,21 +13,31 @@ public class ConferenceRoomReservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int Id;
+    private int id;
+    @NotNull
+    @DateTimeFormat
     private String startDate;
+    @NotNull
+    @DateTimeFormat
     private String endDate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+//    @JsonIgnore
+    @JoinColumn(name = "organization_id")
     private Organization organization;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+//    @JsonIgnore
+    @JoinColumn(name = "conferenceRoom_id")
     private ConferenceRoom conferenceRoom;
 
+    public ConferenceRoomReservation() {
+    }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getStartDate() {

@@ -1,16 +1,15 @@
 package com.piotrgz.restapi.service;
 
 import com.piotrgz.restapi.model.ConferenceRoom;
-import com.piotrgz.restapi.model.Organization;
 import com.piotrgz.restapi.repository.ConferenceRoomRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 import java.util.Objects;
 
-@RestController
+
 @Service
 public class ConferenceRoomService {
 
@@ -43,5 +42,9 @@ public class ConferenceRoomService {
 
     public void delete(int id) {
         conferenceRoomRepo.deleteById(id);
+    }
+
+    public  ConferenceRoom findById(int id){
+        return conferenceRoomRepo.findById(id).get();
     }
 }

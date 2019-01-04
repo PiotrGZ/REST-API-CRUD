@@ -63,7 +63,7 @@ public class OrganizationController {
     }
 
     private boolean isNameValid(String name) {
-        return !name.trim().isEmpty() &&
-                !organizationService.getAll().stream().anyMatch(t -> t.getName().equals(name));
+        return !name.trim().isEmpty()
+                && !organizationService.getAll().stream().anyMatch(t -> t.getName().equals(name));
     }
 }
