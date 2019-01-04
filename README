@@ -1,0 +1,8 @@
+1. Uzywajac IDE InteliJ (menu glowne, wszystkie projekty zamkniete) nalezy uzyc opcji checkout from version control -> Git
+2. W okienku wkleic URL do repozytorium https://github.com/PiotrGZ/CRUD.git
+3. InteliJ zapyta sie, czy chcemy otworzyc projekt, zaznaczamy YES
+4. Pojawi sie okienko "import project from Gradle", zaznaczamy opcje auto-import i klikamy okgi
+5. Po zakonczeniu budowania projektu, klikamy zielona strza³ke aby uruchomic aplikacje
+6. Do terminala (np. git bash) nalezy wpisac: curl -d '{"name": "test", "floor": 10, "numberOfSeats": 10, "conferenceRoomReservationCollection": [], "available": true}' -H "Content-Type: application/json" -X POST http://localhost:8080/conferenceroom
+aby dodac przykladowa sale konferencyjna przy pomocy narzedzia curl, UWAGA nalezy zmienic numer portu w zaleznosci na jakim porcie zostala postawiona aplikacja, nr portu mozna znalezc w logach zapisanych przy uruchamianiu aplikacji
+
