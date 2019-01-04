@@ -44,7 +44,7 @@ public class ConferenceRoomService {
         conferenceRoomRepo.deleteById(id);
     }
 
-    public  ConferenceRoom findById(int id){
-        return conferenceRoomRepo.findById(id).get();
+    public  ConferenceRoom findByName(String name){
+        return conferenceRoomRepo.findByName(name);
     }
 }

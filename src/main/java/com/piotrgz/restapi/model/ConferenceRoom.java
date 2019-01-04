@@ -25,7 +25,6 @@ public class ConferenceRoom {
     @NotNull(message = "Please provide number of seats")
     private Integer numberOfSeats;
     @OneToMany
-            (mappedBy = "conferenceRoom", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ConferenceRoomReservation> conferenceRoomReservationCollection;
 
 

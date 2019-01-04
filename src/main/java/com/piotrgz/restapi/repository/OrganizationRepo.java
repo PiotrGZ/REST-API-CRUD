@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface OrganizationRepo extends CrudRepository<Organization, Integer> {
     List<Organization> findAll();
+    Organization findByName(String name);
 }

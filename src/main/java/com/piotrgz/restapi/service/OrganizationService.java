@@ -38,7 +38,7 @@ public class OrganizationService {
         organizationRepo.deleteById(id);
     }
 
-    public  Organization findById(int id){
-        return organizationRepo.findById(id).get();
+    public  Organization findByName(String name){
+        return organizationRepo.findByName(name);
     }
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ConferenceRoomRepo extends CrudRepository<ConferenceRoom, Integer> {
     List<ConferenceRoom> findAll();
+    ConferenceRoom findByName(String name);
 }

@@ -28,9 +28,9 @@ public class ConferenceRoomReservationService {
     }
 
     public void update(int id, ConferenceRoomReservation conferenceRoomReservation) {
-        ConferenceRoomReservation toUpdate = conferenceRoomReservationRepo.findById(id).get();
-        toUpdate.setConferenceRoom(conferenceRoomReservation.getConferenceRoom());
-        toUpdate.setOrganization(conferenceRoomReservation.getOrganization());
+        ConferenceRoomReservation toUpdate = conferenceRoomReservationRepo.findById(id);
+//        toUpdate.setConferenceRoom(conferenceRoomReservation.getConferenceRoom());
+//        toUpdate.setOrganization(conferenceRoomReservation.getOrganization());
         toUpdate.setStartDate(conferenceRoomReservation.getStartDate());
         toUpdate.setEndDate(conferenceRoomReservation.getEndDate());
 
@@ -39,5 +39,9 @@ public class ConferenceRoomReservationService {
 
     public void delete(int id) {
         conferenceRoomReservationRepo.deleteById(id);
+    }
+
+    public ConferenceRoomReservation findById(int id){
+        return findById(id);
     }
 }

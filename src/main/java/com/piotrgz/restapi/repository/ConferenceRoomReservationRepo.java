@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ConferenceRoomReservationRepo extends CrudRepository<ConferenceRoomReservation, Integer> {
     List<ConferenceRoomReservation> findAll();
+    ConferenceRoomReservation findById(int id);
 }

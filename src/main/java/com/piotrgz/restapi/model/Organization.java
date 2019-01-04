@@ -19,7 +19,6 @@ public class Organization {
     @Size(min = 2, max = 20, message = "Please provide name in range of 2-20 characters")
     private String name;
     @OneToMany
-            (mappedBy = "organization", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ConferenceRoomReservation> conferenceRoomReservationCollection;
 
     public Organization() {
