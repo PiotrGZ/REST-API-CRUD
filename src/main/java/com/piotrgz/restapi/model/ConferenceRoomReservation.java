@@ -21,12 +21,10 @@ public class ConferenceRoomReservation {
     @DateTimeFormat
     private String endDate;
     @ManyToOne(fetch = FetchType.EAGER)
-//    @JsonIgnore
-    @JoinColumn(name = "organization_id")
+    @JsonIgnore
     private Organization organization;
     @ManyToOne(fetch = FetchType.EAGER)
-//    @JsonIgnore
-    @JoinColumn(name = "conferenceRoom_id")
+    @JsonIgnore
     private ConferenceRoom conferenceRoom;
 
     public ConferenceRoomReservation() {
