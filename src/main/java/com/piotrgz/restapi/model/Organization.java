@@ -2,10 +2,8 @@ package com.piotrgz.restapi.model;
 
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -15,22 +13,13 @@ public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @NotNull(message = "Please provide name")
+    @NotBlank(message = "Valid name shouldn't be empty and consist only white characters")
     @Size(min = 2, max = 20, message = "Please provide name in range of 2-20 characters")
     private String name;
-    @OneToMany
-    private List<ConferenceRoomReservation> conferenceRoomReservationCollection;
 
     public Organization() {
     }
 
-    public List<ConferenceRoomReservation> getConferenceRoomReservationCollection() {
-        return conferenceRoomReservationCollection;
-    }
-
-    public void setConferenceRoomReservationCollection(List<ConferenceRoomReservation> conferenceRoomReservationCollection) {
-        this.conferenceRoomReservationCollection = conferenceRoomReservationCollection;
-    }
 
     public int getId() {
         return id;

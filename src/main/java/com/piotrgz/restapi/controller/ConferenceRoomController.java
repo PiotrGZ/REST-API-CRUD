@@ -25,53 +25,28 @@ public class ConferenceRoomController {
 
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody ConferenceRoom conferenceRoom) {
-
-
-        String conferenceRoomName = conferenceRoom.getName();
-
-        if (isNameValid(conferenceRoomName)) {
-            conferenceRoomService.save(conferenceRoom);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.badRequest().body("Name is not valid");
-        }
+        return conferenceRoomService.save(conferenceRoom);
     }
 
     @GetMapping
-
     public ResponseEntity<List<ConferenceRoom>> getAll() {
         return ResponseEntity.ok(conferenceRoomService.getAll());
     }
 
-    @DeleteMapping
-    public ResponseEntity delete(@RequestParam int id) {
-        if (isConferenceRoomPresent(id)) {
-            conferenceRoomService.delete(id);
-            return ResponseEntity.ok().build();
-        } else
-            return ResponseEntity.badRequest().body("Conference room with ID: " + id + " has not been found");
+    @GetMapping("/{name}")
+    public ResponseEntity<ConferenceRoom> findByName(@PathVariable("name") String name) {
+        return conferenceRoomService.findByName(name);
     }
 
 
-    @PatchMapping
-    public ResponseEntity update(@RequestParam int id, @Valid @RequestBody ConferenceRoom conferenceRoom) {
-        String organizationName = conferenceRoom.getName();
-        if (isConferenceRoomPresent(id) && isNameValid(organizationName)) {
-            conferenceRoomService.update(id, conferenceRoom);
-            return ResponseEntity.ok().build();
-        } else
-            return ResponseEntity.badRequest().body("Conference room with ID: " + id + " doesn't exist or name is not valid");
+    @DeleteMapping("/{name}")
+    public ResponseEntity delete(@PathVariable("name") String name) {
+        return conferenceRoomService.delete(name);
     }
 
 
-    private boolean isConferenceRoomPresent(int id) {
-        return conferenceRoomService.getAll().stream().anyMatch(t -> ((Integer) t.getId()).equals(id));
-    }
-
-
-    private boolean isNameValid(String name) {
-
-        return !name.trim().isEmpty() &&
-                !conferenceRoomService.getAll().stream().anyMatch(t -> t.getName().equals(name));
+    @PutMapping("/{name}")
+    public ResponseEntity update(@PathVariable String name, @Valid @RequestBody ConferenceRoom conferenceRoom) {
+        return conferenceRoomService.update(name, conferenceRoom);
     }
 }

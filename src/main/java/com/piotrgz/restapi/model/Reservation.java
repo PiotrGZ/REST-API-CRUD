@@ -1,42 +1,37 @@
 package com.piotrgz.restapi.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.format.annotation.DateTimeFormat;
+
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
-public class ConferenceRoomReservation {
+public class Reservation {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @NotNull(message = "Please provide organization name")
+    @NotBlank(message = "Valid name shouldn't be empty and consist only white characters")
+    @Size(min = 2, max = 20, message = "Name should be between 2 and 20 characters")
+    private String name;
+    @NotBlank(message = "Please provide organization name, valid name shouldn't be empty and consist only white characters")
     @Size(min = 2, max = 20, message = "Please provide organization name in range of 2-20 characters")
     private String organizationName;
-    @NotNull(message = "Please provide conference room name")
+    @NotBlank(message = "Please provide conference room name, valid name shouldn't be empty and consist only white characters")
     @Size(min = 2, max = 20, message = "Please provide conference room name in range of 2-20 characters")
     private String conferenceRoomName;
-    @NotNull
-    @DateTimeFormat
-    private String startDate;
-    @NotNull
-    @DateTimeFormat
-    private String endDate;
-    @ManyToOne
-//            (cascade = CascadeType.MERGE)
-    @JsonIgnore
-    private Organization organization;
-    @ManyToOne
-//            (cascade = CascadeType.MERGE)
-    @JsonIgnore
-    private ConferenceRoom conferenceRoom;
+    @NotNull(message = "Please enter start date")
+    private LocalDateTime startDate;
+    @NotNull(message = "Please enter end date")
+    private LocalDateTime endDate;
 
-    public ConferenceRoomReservation() {
+
+    public Reservation() {
     }
 
     public String getOrganizationName() {
@@ -63,35 +58,27 @@ public class ConferenceRoomReservation {
         this.id = id;
     }
 
-    public String getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public Organization getOrganization() {
-        return organization;
+    public String getName() {
+        return name;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-
-    public ConferenceRoom getConferenceRoom() {
-        return conferenceRoom;
-    }
-
-    public void setConferenceRoom(ConferenceRoom conferenceRoom) {
-        this.conferenceRoom = conferenceRoom;
+    public void setName(String name) {
+        this.name = name;
     }
 }

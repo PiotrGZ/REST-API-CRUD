@@ -26,44 +26,29 @@ public class OrganizationController {
 
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody Organization organization) {
-
-        if (isNameValid(organization.getName()))
-            organizationService.save(organization);
-        return ResponseEntity.ok().build();
+        return organizationService.save(organization);
     }
 
     @GetMapping
-
     public ResponseEntity<List<Organization>> getAll() {
         return ResponseEntity.ok(organizationService.getAll());
     }
 
-    @DeleteMapping
-    public ResponseEntity delete(@RequestParam int id) {
-        if (isOrganizationPresent(id)) {
-            organizationService.delete(id);
-            return ResponseEntity.ok().build();
-        } else
-            return ResponseEntity.badRequest().body("Organization with id " + id + " has not been found");
+    @GetMapping("/{name}")
+    public ResponseEntity<Organization> findByName(@PathVariable("name") String name) {
+        return organizationService.findByName(name);
     }
 
 
-    @PatchMapping
-    public ResponseEntity update(@RequestParam int id, @Valid @RequestBody Organization organization) {
-        if (isOrganizationPresent(id) && isNameValid(organization.getName())) {
-            organizationService.update(id, organization);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.badRequest().body("Organization with id " + id + " has not been found, or name is not valid");
-        }
+    @DeleteMapping("/{name}")
+    public ResponseEntity delete(@PathVariable("name") String name) {
+        return organizationService.delete(name);
     }
 
-    private boolean isOrganizationPresent(int id) {
-        return organizationService.getAll().stream().anyMatch(t -> ((Integer) t.getId()).equals(id));
-    }
 
-    private boolean isNameValid(String name) {
-        return !name.trim().isEmpty()
-                && !organizationService.getAll().stream().anyMatch(t -> t.getName().equals(name));
+    @PutMapping("/{name}")
+    public ResponseEntity update(@PathVariable String name, @Valid @RequestBody Organization organization) {
+        return organizationService.update(name, organization);
     }
 }
+

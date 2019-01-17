@@ -6,8 +6,9 @@ import org.springframework.data.repository.CrudRepository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrganizationRepo extends CrudRepository<Organization, Integer> {
     List<Organization> findAll();
-    Organization findByName(String name);
+    Optional<Organization> findByName(String name);
 }
