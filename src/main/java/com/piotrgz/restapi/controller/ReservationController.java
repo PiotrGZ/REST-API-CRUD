@@ -29,10 +29,10 @@ public class ReservationController {
 
     }
 
-    @PostMapping
-    public ResponseEntity save(@Valid @RequestBody Reservation reservation) {
-        return reservationService.save(reservation);
-    }
+//    @PostMapping
+//    public ResponseEntity save(@Valid @RequestBody Reservation reservation) {
+//        return reservationService.save(reservation);
+//    }
 
     @GetMapping
     public ResponseEntity<List<Reservation>> getAll() {

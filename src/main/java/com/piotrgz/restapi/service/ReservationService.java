@@ -27,39 +27,39 @@ public class ReservationService {
         this.conferenceRoomService = Objects.requireNonNull(conferenceRoomService);
     }
 
-    public ResponseEntity save(Reservation reservation) {
-
-        if (validateReservation(reservation)) {
-            reservationRepo.save(reservation);
-            return ResponseEntity.ok(reservation);
-        }
-
-        return reservationNotValid(validationOfReservationResult);
-    }
-
-    private boolean validateReservation(Reservation reservation) {
-
-        boolean validationFlag = true;
-
-        ResponseEntity organizationToSave = organizationService.findByName(reservation.getOrganizationName());
-        ResponseEntity conferenceRoomToSave = conferenceRoomService.findByName(reservation.getConferenceRoomName());
-        Optional<Reservation> reservationOptional = reservationRepo.findByName(reservation.getName());
-
-        if (!(organizationToSave.getBody() instanceof Organization)) {
-            validationOfReservationResult.append("Organization with name " + reservation.getOrganizationName() + " not found!\n");
-            validationFlag = false;
-        }
-        if (!(conferenceRoomToSave.getBody() instanceof ConferenceRoom)) {
-            validationOfReservationResult.append("Conference room with name " + reservation.getConferenceRoomName() + " not found!\n");
-            validationFlag = false;
-        }
-        if (reservationOptional.isPresent()) {
-            validationOfReservationResult.append("Reservation with name " + reservation.getOrganizationName() + " already exists!\n");
-            validationFlag = false;
-        }
-
-        return validationFlag;
-    }
+//    public ResponseEntity save(Reservation reservation) {
+//
+//        if (validateReservation(reservation)) {
+//            reservationRepo.save(reservation);
+//            return ResponseEntity.ok(reservation);
+//        }
+//
+//        return reservationNotValid(validationOfReservationResult);
+//    }
+//
+//    private boolean validateReservation(Reservation reservation) {
+//
+//        boolean validationFlag = true;
+//
+//        ResponseEntity organizationToSave = organizationService.findByName(reservation.getOrganizationName());
+//        ResponseEntity conferenceRoomToSave = conferenceRoomService.findByName(reservation.getConferenceRoomName());
+//        Optional<Reservation> reservationOptional = reservationRepo.findByName(reservation.getName());
+//
+//        if (!(organizationToSave.getBody() instanceof Organization)) {
+//            validationOfReservationResult.append("Organization with name " + reservation.getOrganizationName() + " not found!\n");
+//            validationFlag = false;
+//        }
+//        if (!(conferenceRoomToSave.getBody() instanceof ConferenceRoom)) {
+//            validationOfReservationResult.append("Conference room with name " + reservation.getConferenceRoomName() + " not found!\n");
+//            validationFlag = false;
+//        }
+//        if (reservationOptional.isPresent()) {
+//            validationOfReservationResult.append("Reservation with name " + reservation.getOrganizationName() + " already exists!\n");
+//            validationFlag = false;
+//        }
+//
+//        return validationFlag;
+//    }
 
 
     public List<Reservation> getAll() {

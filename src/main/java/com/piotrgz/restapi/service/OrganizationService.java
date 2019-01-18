@@ -1,7 +1,9 @@
 package com.piotrgz.restapi.service;
 
 import com.piotrgz.restapi.model.Organization;
+import com.piotrgz.restapi.modelDTO.OrganizationDTO;
 import com.piotrgz.restapi.repository.OrganizationRepo;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,76 +23,40 @@ public class OrganizationService {
         this.organizationRepo = Objects.requireNonNull(organizationRepository);
     }
 
-    public ResponseEntity save(Organization organization) {
+    public Organization save(Organization organization) throws ValidationException {
 
-        Optional<Organization> organizationToSave = findByNameInService(organization.getName());
-
-        if (!organizationToSave.isPresent()) {
-            organizationRepo.save(organization);
-            return ResponseEntity.ok(organization);
+        if (!organizationRepo.findById(organization.getName()).isPresent()) {
+            return organizationRepo.save(organization);
         }
-        return badRequestNameIsNotUnique(organization.getName());
+        throw new ValidationException("Organization with name " + organization.getName() + " already exists!");
     }
 
-
-    public List<Organization> getAll() {
+    public Iterable<Organization> getAll() {
         return organizationRepo.findAll();
     }
 
 
-    public ResponseEntity findByName(String name) {
-        Optional<Organization> organizationToFind = findByNameInService(name);
-
-        if (organizationToFind.isPresent()) {
-            return ResponseEntity.ok(organizationToFind.get());
-        }
-        return badRequestNameNotFond(name);
+    public Organization findByName(String name) throws ValidationException {
+        return organizationRepo.findById(name).orElseThrow(() -> new ValidationException("Organization " + name + " has not been found"));
     }
 
 
-    public ResponseEntity update(String name, Organization organization) {
+    public Organization update(String name, Organization organization) throws ValidationException {
 
-        Optional<Organization> organizationToUpdateOpt = findByNameInService(name);
-
-        if (organizationToUpdateOpt.isPresent() && areNamesEqual(organization, organizationToUpdateOpt)) {
-            return badRequestNameIsNotUnique(name);
+        if (!organizationRepo.findById(organization.getName()).isPresent()) {
+            throw new ValidationException("Organization " + name + " already exists!");
         }
 
+        Organization organizationToUpdate = organizationRepo.findById(name).orElseThrow(() -> new ValidationException("Organization " + name + " has not been found"));
 
-        if (organizationToUpdateOpt.isPresent()) {
-            Organization organizationToUpdate = organizationToUpdateOpt.get();
-            organizationToUpdate.setName(organization.getName());
-            organizationRepo.save(organizationToUpdate);
-            return ResponseEntity.ok("Organization " + name + " has been updated");
-        }
-        return badRequestNameNotFond(name);
+        organizationToUpdate.setName(organization.getName());
+        return organizationRepo.save(organizationToUpdate);
     }
 
 
-    public ResponseEntity delete(String name) {
+    public void delete(String name) throws ValidationException {
 
-        Optional<Organization> organizationToDelete = findByNameInService(name);
-
-        if (organizationToDelete.isPresent()) {
-            organizationRepo.delete(organizationToDelete.get());
-            return ResponseEntity.ok("Organization " + name + " has been deleted");
-        }
-        return badRequestNameNotFond(name);
+        organizationRepo.delete(organizationRepo.findById(name).orElseThrow(() -> new ValidationException("Organization " + name + " has not been found")));
     }
 
-    private ResponseEntity badRequestNameNotFond(String name) {
-        return ResponseEntity.badRequest().body("Organization " + name + " has not been found");
-    }
-
-    private Optional<Organization> findByNameInService(String name) {
-        return organizationRepo.findByName(name);
-    }
-
-    private boolean areNamesEqual(Organization organization, Optional<Organization> organizationToUpdateOpt) {
-        return organizationToUpdateOpt.get().getName().equals(organization.getName());
-    }
-
-    private ResponseEntity badRequestNameIsNotUnique(String name) {
-        return ResponseEntity.badRequest().body("Organization with name " + name + " already exists!\n");
-    }
 }
