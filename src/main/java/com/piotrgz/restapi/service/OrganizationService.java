@@ -43,7 +43,7 @@ public class OrganizationService {
 
     public Organization update(String name, Organization organization) throws ValidationException {
 
-        if (!organizationRepo.findById(organization.getName()).isPresent()) {
+        if (organizationRepo.findById(organization.getName()).isPresent()) {
             throw new ValidationException("Organization " + name + " already exists!");
         }
 
