@@ -46,6 +46,17 @@ public class ConferenceRoomService {
         ConferenceRoom conferenceRoomToUpdate = findByName(name);
 
         conferenceRoomToUpdate.setName(conferenceRoom.getName());
+        conferenceRoomToUpdate.setNumberOfSeats(conferenceRoom.getNumberOfSeats());
+        conferenceRoomToUpdate.setAvailable(conferenceRoom.isAvailable());
+        conferenceRoomToUpdate.setFloor(conferenceRoom.getFloor());
+        conferenceRoomToUpdate.setCommunicationInterface(conferenceRoom.getCommunicationInterface());
+        conferenceRoomToUpdate.setExternalPhoneNumber(conferenceRoom.getExternalPhoneNumber());
+        conferenceRoomToUpdate.setInternalPhoneNumber(conferenceRoom.getInternalPhoneNumber());
+        conferenceRoomToUpdate.setProjector(conferenceRoom.getProjector());
+        conferenceRoomToUpdate.setNumberOfLyingPlace(conferenceRoom.getNumberOfLyingPlace());
+        conferenceRoomToUpdate.setNumberOfStandingPlace(conferenceRoom.getNumberOfStandingPlace());
+        conferenceRoomToUpdate.setPhonePresent(conferenceRoom.isPhonePresent());
+
         return conferenceRoomRepo.save(conferenceRoomToUpdate);
     }
 
