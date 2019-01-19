@@ -6,7 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReservationRepo extends CrudRepository<Reservation, Integer> {
-    List<Reservation> findAll();
-    Optional<Reservation> findByName(String name);
+public interface ReservationRepo extends CrudRepository<Reservation, String> {
 }

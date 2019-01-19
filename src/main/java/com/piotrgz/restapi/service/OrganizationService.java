@@ -1,16 +1,11 @@
 package com.piotrgz.restapi.service;
 
 import com.piotrgz.restapi.model.Organization;
-import com.piotrgz.restapi.modelDTO.OrganizationDTO;
 import com.piotrgz.restapi.repository.OrganizationRepo;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
@@ -23,12 +18,12 @@ public class OrganizationService {
         this.organizationRepo = Objects.requireNonNull(organizationRepository);
     }
 
-    public Organization save(Organization organization) throws ValidationException {
+    public Organization save(Organization organization) throws MyValidationException {
 
-        if (!organizationRepo.findById(organization.getName()).isPresent()) {
-            return organizationRepo.save(organization);
+        if (organizationRepo.findById(organization.getName()).isPresent()) {
+            throw new MyValidationException("Organization with name " + organization.getName() + " already exists!");
         }
-        throw new ValidationException("Organization with name " + organization.getName() + " already exists!");
+        return organizationRepo.save(organization);
     }
 
     public Iterable<Organization> getAll() {
@@ -36,27 +31,26 @@ public class OrganizationService {
     }
 
 
-    public Organization findByName(String name) throws ValidationException {
-        return organizationRepo.findById(name).orElseThrow(() -> new ValidationException("Organization " + name + " has not been found"));
+    public Organization findByName(String name) throws MyValidationException {
+        return organizationRepo.findById(name).orElseThrow(() -> new MyValidationException("Organization " + name + " has not been found"));
     }
 
 
-    public Organization update(String name, Organization organization) throws ValidationException {
+    public Organization update(String name, Organization organization) throws MyValidationException {
 
         if (organizationRepo.findById(organization.getName()).isPresent()) {
-            throw new ValidationException("Organization " + name + " already exists!");
+            throw new MyValidationException("Organization with name " + name + " already exists!");
         }
 
-        Organization organizationToUpdate = organizationRepo.findById(name).orElseThrow(() -> new ValidationException("Organization " + name + " has not been found"));
+        Organization organizationToUpdate = findByName(name);
 
         organizationToUpdate.setName(organization.getName());
         return organizationRepo.save(organizationToUpdate);
     }
 
 
-    public void delete(String name) throws ValidationException {
+    public void delete(String name) throws MyValidationException {
 
-        organizationRepo.delete(organizationRepo.findById(name).orElseThrow(() -> new ValidationException("Organization " + name + " has not been found")));
+        organizationRepo.delete(findByName(name));
     }
-
 }

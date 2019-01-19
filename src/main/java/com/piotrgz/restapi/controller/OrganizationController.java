@@ -5,7 +5,7 @@ import com.piotrgz.restapi.model.Organization;
 
 import com.piotrgz.restapi.modelDTO.OrganizationDTO;
 import com.piotrgz.restapi.service.OrganizationService;
-import com.piotrgz.restapi.service.ValidationException;
+import com.piotrgz.restapi.service.MyValidationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class OrganizationController {
     public ResponseEntity save(@Valid @RequestBody OrganizationDTO organizationDTO) {
         try {
             return ResponseEntity.ok(organizationService.save(convertToEntity(organizationDTO)));
-        } catch (ValidationException e) {
+        } catch (MyValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -46,7 +46,7 @@ public class OrganizationController {
     public ResponseEntity findByName(@PathVariable("name") String name) {
         try {
             return ResponseEntity.ok(convertToDto(organizationService.findByName(name)));
-        } catch (ValidationException e) {
+        } catch (MyValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -57,7 +57,7 @@ public class OrganizationController {
         try {
             organizationService.delete(name);
             return ResponseEntity.ok().build();
-        } catch (ValidationException e) {
+        } catch (MyValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -67,7 +67,7 @@ public class OrganizationController {
     public ResponseEntity update(@PathVariable String name, @Valid @RequestBody OrganizationDTO organizationDTO) {
         try {
             return ResponseEntity.ok(convertToDto(organizationService.update(name, convertToEntity(organizationDTO))));
-        } catch (ValidationException e) {
+        } catch (MyValidationException e) {
            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

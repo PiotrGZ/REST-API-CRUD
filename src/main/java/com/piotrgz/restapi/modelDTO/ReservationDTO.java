@@ -1,19 +1,12 @@
-package com.piotrgz.restapi.model;
+package com.piotrgz.restapi.modelDTO;
 
-
-
-
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Entity
-public class Reservation {
+public class ReservationDTO {
 
-
-    @Id
     @NotBlank(message = "Valid name shouldn't be empty and consist only white characters")
     @Size(min = 2, max = 20, message = "Name should be between 2 and 20 characters")
     private String name;
@@ -28,8 +21,15 @@ public class Reservation {
     @NotNull(message = "Please enter end date")
     private LocalDateTime endDate;
 
+    public ReservationDTO() {
+    }
 
-    public Reservation() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getOrganizationName() {
@@ -62,13 +62,5 @@ public class Reservation {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

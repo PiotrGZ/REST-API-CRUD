@@ -1,17 +1,11 @@
-package com.piotrgz.restapi.model;
+package com.piotrgz.restapi.modelDTO;
 
-
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.*;
 import javax.validation.constraints.*;
 
-@Entity
-public class ConferenceRoom {
+public class ConferenceRoomDTO {
 
-    @Id
     @NotBlank(message = "Valid name shouldn't be empty and consist only white characters")
     @Size(min = 2, max = 20, message = "Name should be between 2 and 20 characters")
     private String name;
@@ -33,8 +27,7 @@ public class ConferenceRoom {
     @Pattern(regexp = "USB|bluetooth", message = "Available communication interfaces are USB or bluetooth")
     private String communicationInterface;
 
-
-    public ConferenceRoom() {
+    public ConferenceRoomDTO() {
     }
 
     public String getName() {
