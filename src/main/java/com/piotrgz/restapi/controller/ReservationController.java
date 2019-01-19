@@ -1,22 +1,15 @@
 package com.piotrgz.restapi.controller;
 
 
-import com.piotrgz.restapi.model.ConferenceRoom;
 import com.piotrgz.restapi.model.Reservation;
-import com.piotrgz.restapi.model.Organization;
-import com.piotrgz.restapi.modelDTO.OrganizationDTO;
 import com.piotrgz.restapi.modelDTO.ReservationDTO;
-import com.piotrgz.restapi.service.MyValidationException;
 import com.piotrgz.restapi.service.ReservationService;
-import com.piotrgz.restapi.service.ConferenceRoomService;
-import com.piotrgz.restapi.service.OrganizationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -34,12 +27,8 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody ReservationDTO reservationDTO) {
-        try {
-            return ResponseEntity.ok(reservationService.save(convertToEntity(reservationDTO)));
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ReservationDTO save(@Valid @RequestBody ReservationDTO reservationDTO) throws IllegalArgumentException {
+        return convertToDto(reservationService.save(convertToEntity(reservationDTO)));
     }
 
     @GetMapping
@@ -48,33 +37,20 @@ public class ReservationController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity findByName(@PathVariable("name") String name) {
-        try {
-            return ResponseEntity.ok(convertToDto(reservationService.findByName(name)));
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ReservationDTO findByName(@PathVariable("name") String name) throws IllegalArgumentException {
+           return convertToDto(reservationService.findByName(name));
     }
 
 
     @DeleteMapping("/{name}")
-    public ResponseEntity delete(@PathVariable("name") String name) {
-        try {
+    public void delete(@PathVariable("name") String name) throws IllegalArgumentException {
             reservationService.delete(name);
-            return ResponseEntity.ok().build();
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
 
     @PutMapping("/{name}")
-    public ResponseEntity update(@PathVariable String name, @Valid @RequestBody ReservationDTO reservationDTO) {
-        try {
-            return ResponseEntity.ok(convertToDto(reservationService.update(name, convertToEntity(reservationDTO))));
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ReservationDTO update(@PathVariable String name, @Valid @RequestBody ReservationDTO reservationDTO) throws IllegalArgumentException{
+            return convertToDto(reservationService.update(name, convertToEntity(reservationDTO)));
     }
 
     private ReservationDTO convertToDto(Reservation reservation) {

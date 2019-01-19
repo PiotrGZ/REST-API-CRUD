@@ -5,7 +5,6 @@ import com.piotrgz.restapi.model.Organization;
 
 import com.piotrgz.restapi.modelDTO.OrganizationDTO;
 import com.piotrgz.restapi.service.OrganizationService;
-import com.piotrgz.restapi.service.MyValidationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +24,12 @@ public class OrganizationController {
     @Autowired
     public OrganizationController(OrganizationService organizationService, ModelMapper modelMapper) {
         this.organizationService = Objects.requireNonNull(organizationService);
-        this.modelMapper=Objects.requireNonNull(modelMapper);
+        this.modelMapper = Objects.requireNonNull(modelMapper);
     }
 
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody OrganizationDTO organizationDTO) {
-        try {
-            return ResponseEntity.ok(organizationService.save(convertToEntity(organizationDTO)));
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public OrganizationDTO save(@Valid @RequestBody OrganizationDTO organizationDTO) throws IllegalArgumentException {
+        return convertToDto(organizationService.save(convertToEntity(organizationDTO)));
     }
 
     @GetMapping
@@ -43,40 +38,27 @@ public class OrganizationController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity findByName(@PathVariable("name") String name) {
-        try {
-            return ResponseEntity.ok(convertToDto(organizationService.findByName(name)));
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public OrganizationDTO findByName(@PathVariable("name") String name) throws IllegalArgumentException {
+        return convertToDto(organizationService.findByName(name));
     }
 
 
     @DeleteMapping("/{name}")
-    public ResponseEntity delete(@PathVariable("name") String name) {
-        try {
-            organizationService.delete(name);
-            return ResponseEntity.ok().build();
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public void delete(@PathVariable("name") String name) throws IllegalArgumentException {
+        organizationService.delete(name);
     }
 
 
     @PutMapping("/{name}")
-    public ResponseEntity update(@PathVariable String name, @Valid @RequestBody OrganizationDTO organizationDTO) {
-        try {
-            return ResponseEntity.ok(convertToDto(organizationService.update(name, convertToEntity(organizationDTO))));
-        } catch (MyValidationException e) {
-           return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public OrganizationDTO update(@PathVariable String name, @Valid @RequestBody OrganizationDTO organizationDTO) throws IllegalArgumentException {
+        return convertToDto(organizationService.update(name, convertToEntity(organizationDTO)));
     }
 
     private OrganizationDTO convertToDto(Organization organization) {
         return modelMapper.map(organization, OrganizationDTO.class);
     }
 
-    private Organization convertToEntity(OrganizationDTO organizationDTO){
+    private Organization convertToEntity(OrganizationDTO organizationDTO) {
         return modelMapper.map(organizationDTO, Organization.class);
     }
 }

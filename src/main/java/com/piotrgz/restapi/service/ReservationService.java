@@ -1,16 +1,14 @@
 package com.piotrgz.restapi.service;
 
-import com.piotrgz.restapi.model.ConferenceRoom;
-import com.piotrgz.restapi.model.Organization;
+
+import com.piotrgz.restapi.exceptions.MyEntityAlreadyExistsException;
+import com.piotrgz.restapi.exceptions.MyEntityNotFoundException;
 import com.piotrgz.restapi.model.Reservation;
 import com.piotrgz.restapi.repository.ReservationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -27,10 +25,10 @@ public class ReservationService {
         this.conferenceRoomService = Objects.requireNonNull(conferenceRoomService);
     }
 
-    public Reservation save(Reservation reservation) throws MyValidationException {
+    public Reservation save(Reservation reservation) throws IllegalArgumentException {
 
         if (reservationRepo.findById(reservation.getName()).isPresent()) {
-            throw new MyValidationException("Reservation with name " + reservation.getName() + " already exists!");
+            throw new MyEntityAlreadyExistsException("Reservation with name " + reservation.getName() + " already exists!");
         }
 
         reservation.getOrganizationName().equals(organizationService.findByName(reservation.getOrganizationName()));
@@ -44,15 +42,15 @@ public class ReservationService {
     }
 
 
-    public Reservation findByName(String name) throws MyValidationException {
-        return reservationRepo.findById(name).orElseThrow(() -> new MyValidationException("Reservation " + name + " has not been found"));
+    public Reservation findByName(String name) throws IllegalArgumentException {
+        return reservationRepo.findById(name).orElseThrow(() -> new MyEntityNotFoundException("Reservation " + name + " has not been found"));
     }
 
 
-    public Reservation update(String name, Reservation reservation) throws MyValidationException {
+    public Reservation update(String name, Reservation reservation) throws IllegalArgumentException {
 
         if (reservationRepo.findById(reservation.getName()).isPresent()) {
-            throw new MyValidationException("Reservation with name " + name + " already exists!");
+            throw new MyEntityAlreadyExistsException("Reservation with name " + name + " already exists!");
         }
 
         reservation.getOrganizationName().equals(organizationService.findByName(reservation.getOrganizationName()));
@@ -69,7 +67,7 @@ public class ReservationService {
     }
 
 
-    public void delete(String name) throws MyValidationException {
+    public void delete(String name) throws IllegalArgumentException {
 
         reservationRepo.delete(findByName(name));
     }

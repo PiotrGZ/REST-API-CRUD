@@ -1,4 +1,4 @@
-package com.piotrgz.restapi.Configurations;
+package com.piotrgz.restapi.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

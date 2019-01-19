@@ -5,7 +5,6 @@ import com.piotrgz.restapi.model.ConferenceRoom;
 
 import com.piotrgz.restapi.modelDTO.ConferenceRoomDTO;
 import com.piotrgz.restapi.service.ConferenceRoomService;
-import com.piotrgz.restapi.service.MyValidationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +24,12 @@ public class ConferenceRoomController {
     @Autowired
     public ConferenceRoomController(ConferenceRoomService conferenceRoomService, ModelMapper modelMapper) {
         this.conferenceRoomService = Objects.requireNonNull(conferenceRoomService);
-        this.modelMapper=Objects.requireNonNull(modelMapper);
+        this.modelMapper = Objects.requireNonNull(modelMapper);
     }
 
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody ConferenceRoomDTO conferenceRoomDTO) {
-        try {
-            return ResponseEntity.ok(conferenceRoomService.save(convertToEntity(conferenceRoomDTO)));
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ConferenceRoomDTO save(@Valid @RequestBody ConferenceRoomDTO conferenceRoomDTO) throws IllegalArgumentException {
+        return convertToDto(conferenceRoomService.save(convertToEntity(conferenceRoomDTO)));
     }
 
     @GetMapping
@@ -43,40 +38,27 @@ public class ConferenceRoomController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity findByName(@PathVariable("name") String name) {
-        try {
-            return ResponseEntity.ok(convertToDto(conferenceRoomService.findByName(name)));
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ConferenceRoomDTO findByName(@PathVariable("name") String name) throws IllegalArgumentException {
+        return convertToDto(conferenceRoomService.findByName(name));
     }
 
 
     @DeleteMapping("/{name}")
-    public ResponseEntity delete(@PathVariable("name") String name) {
-        try {
-            conferenceRoomService.delete(name);
-            return ResponseEntity.ok().build();
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public void delete(@PathVariable("name") String name) throws IllegalArgumentException {
+        conferenceRoomService.delete(name);
     }
 
 
     @PutMapping("/{name}")
-    public ResponseEntity update(@PathVariable String name, @Valid @RequestBody ConferenceRoomDTO conferenceRoomDTO) {
-        try {
-            return ResponseEntity.ok(convertToDto(conferenceRoomService.update(name, convertToEntity(conferenceRoomDTO))));
-        } catch (MyValidationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ConferenceRoomDTO update(@PathVariable String name, @Valid @RequestBody ConferenceRoomDTO conferenceRoomDTO) throws IllegalArgumentException {
+        return convertToDto(conferenceRoomService.update(name, convertToEntity(conferenceRoomDTO)));
     }
 
     private ConferenceRoomDTO convertToDto(ConferenceRoom conferenceRoom) {
         return modelMapper.map(conferenceRoom, ConferenceRoomDTO.class);
     }
 
-    private ConferenceRoom convertToEntity(ConferenceRoomDTO conferenceRoomDTO){
+    private ConferenceRoom convertToEntity(ConferenceRoomDTO conferenceRoomDTO) {
         return modelMapper.map(conferenceRoomDTO, ConferenceRoom.class);
     }
 }
