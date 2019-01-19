@@ -1,9 +1,9 @@
 package com.piotrgz.restapi.controller;
 
 
-import com.piotrgz.restapi.model.Organization;
+import com.piotrgz.restapi.entity.Organization;
 
-import com.piotrgz.restapi.modelDTO.OrganizationDTO;
+import com.piotrgz.restapi.model.OrganizationDTO;
 import com.piotrgz.restapi.service.OrganizationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

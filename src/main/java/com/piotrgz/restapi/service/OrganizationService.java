@@ -2,7 +2,7 @@ package com.piotrgz.restapi.service;
 
 
 import com.piotrgz.restapi.exceptions.MyEntityAlreadyExistsException;
-import com.piotrgz.restapi.model.Organization;
+import com.piotrgz.restapi.entity.Organization;
 import com.piotrgz.restapi.repository.OrganizationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

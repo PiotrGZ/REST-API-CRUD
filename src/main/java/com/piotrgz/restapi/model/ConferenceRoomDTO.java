@@ -1,4 +1,4 @@
-package com.piotrgz.restapi.modelDTO;
+package com.piotrgz.restapi.model;
 
 import org.hibernate.validator.constraints.Range;
 
@@ -12,16 +12,16 @@ public class ConferenceRoomDTO {
     @NotNull(message = "Please provide floor number from 0 to 10")
     @Max(value = 10, message = "Floor number must be less or equal 10")
     @Min(value = 0, message = "Floor number must be greater or equal 0")
-    private int floor;
-    private boolean available;
+    private Integer floor;
+    private Boolean available;
     @NotNull
-    private int numberOfSeats;
-    private int numberOfStandingPlace;
-    private int numberOfLyingPlace;
+    private Integer numberOfSeats;
+    private Integer numberOfStandingPlace;
+    private Integer numberOfLyingPlace;
     private String projector;
-    private boolean isPhonePresent;
+    private Boolean isPhonePresent;
     @Range(min = 0, max = 99, message = "Internal phone number must be in range of 0 and 99")
-    private int internalPhoneNumber;
+    private Integer internalPhoneNumber;
     @Pattern(regexp = "\\++[0-9]{2}+\\s+[0-9]{9}", message = "External phone number must be in format +12 123456789")
     private String externalPhoneNumber;
     @Pattern(regexp = "USB|bluetooth", message = "Available communication interfaces are USB or bluetooth")

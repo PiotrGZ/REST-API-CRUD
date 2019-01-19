@@ -1,9 +1,9 @@
 package com.piotrgz.restapi.controller;
 
-import com.piotrgz.restapi.model.ConferenceRoom;
+import com.piotrgz.restapi.entity.ConferenceRoom;
 
 
-import com.piotrgz.restapi.modelDTO.ConferenceRoomDTO;
+import com.piotrgz.restapi.model.ConferenceRoomDTO;
 import com.piotrgz.restapi.service.ConferenceRoomService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

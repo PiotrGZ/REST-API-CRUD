@@ -1,10 +1,7 @@
 package com.piotrgz.restapi.repository;
 
-import com.piotrgz.restapi.model.ConferenceRoom;
+import com.piotrgz.restapi.entity.ConferenceRoom;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface ConferenceRoomRepo extends CrudRepository<ConferenceRoom, String> {
 }

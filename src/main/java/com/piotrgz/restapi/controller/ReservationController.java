@@ -1,8 +1,8 @@
 package com.piotrgz.restapi.controller;
 
 
-import com.piotrgz.restapi.model.Reservation;
-import com.piotrgz.restapi.modelDTO.ReservationDTO;
+import com.piotrgz.restapi.entity.Reservation;
+import com.piotrgz.restapi.model.ReservationDTO;
 import com.piotrgz.restapi.service.ReservationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

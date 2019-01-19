@@ -3,7 +3,7 @@ package com.piotrgz.restapi.service;
 
 import com.piotrgz.restapi.exceptions.MyEntityAlreadyExistsException;
 import com.piotrgz.restapi.exceptions.MyEntityNotFoundException;
-import com.piotrgz.restapi.model.ConferenceRoom;
+import com.piotrgz.restapi.entity.ConferenceRoom;
 import com.piotrgz.restapi.repository.ConferenceRoomRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

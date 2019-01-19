@@ -1,12 +1,9 @@
-package com.piotrgz.restapi.model;
+package com.piotrgz.restapi.entity;
 
 
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,18 +11,10 @@ public class Reservation {
 
 
     @Id
-    @NotBlank(message = "Valid name shouldn't be empty and consist only white characters")
-    @Size(min = 2, max = 20, message = "Name should be between 2 and 20 characters")
     private String name;
-    @NotBlank(message = "Please provide organization name, valid name shouldn't be empty and consist only white characters")
-    @Size(min = 2, max = 20, message = "Please provide organization name in range of 2-20 characters")
     private String organizationName;
-    @NotBlank(message = "Please provide conference room name, valid name shouldn't be empty and consist only white characters")
-    @Size(min = 2, max = 20, message = "Please provide conference room name in range of 2-20 characters")
     private String conferenceRoomName;
-    @NotNull(message = "Please enter start date")
     private LocalDateTime startDate;
-    @NotNull(message = "Please enter end date")
     private LocalDateTime endDate;
 
 
