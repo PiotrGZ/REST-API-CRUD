@@ -1,71 +1,89 @@
 package com.piotrgz.restapi.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.piotrgz.restapi.exceptions.MyEntityAlreadyExistsException;
 import com.piotrgz.restapi.exceptions.MyEntityNotFoundException;
 import com.piotrgz.restapi.entity.ConferenceRoom;
+import com.piotrgz.restapi.model.ConferenceRoomDTO;
 import com.piotrgz.restapi.repository.ConferenceRoomRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 import java.util.Objects;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 
 @Service
 public class ConferenceRoomService {
 
     private ConferenceRoomRepo conferenceRoomRepo;
+    private ObjectMapper objectMapper;
 
     @Autowired
-    public ConferenceRoomService(ConferenceRoomRepo conferenceRoomRepo) {
+    public ConferenceRoomService(ConferenceRoomRepo conferenceRoomRepo, ObjectMapper objectMapper) {
         this.conferenceRoomRepo = Objects.requireNonNull(conferenceRoomRepo);
+        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
-    public ConferenceRoom save(ConferenceRoom conferenceRoom) throws IllegalArgumentException {
+    public ConferenceRoomDTO save(ConferenceRoomDTO conferenceRoomDTO) throws IllegalArgumentException {
 
-        if (conferenceRoomRepo.findById(conferenceRoom.getName()).isPresent()) {
-            throw new MyEntityAlreadyExistsException("Conference room with name " + conferenceRoom.getName() + " already exists!");
+        if (conferenceRoomRepo.findById(conferenceRoomDTO.getName()).isPresent()) {
+            throw new MyEntityAlreadyExistsException("Conference room with name " + conferenceRoomDTO.getName() + " already exists!");
         }
-        return conferenceRoomRepo.save(conferenceRoom);
+        return convertToDto(conferenceRoomRepo.save(convertToEntity(conferenceRoomDTO)));
     }
 
-    public Iterable<ConferenceRoom> getAll() {
-        return conferenceRoomRepo.findAll();
+    public Iterable<ConferenceRoomDTO> getAll() {
+
+        Stream<ConferenceRoomDTO> stream = StreamSupport.stream(conferenceRoomRepo.findAll().spliterator(), false)
+                .map(organization -> convertToDto(organization));
+
+        return stream::iterator;
     }
 
 
-    public ConferenceRoom findByName(String name) throws IllegalArgumentException {
-        return conferenceRoomRepo.findById(name).orElseThrow(() -> new MyEntityNotFoundException("Conference room " + name + " has not been found"));
+    public ConferenceRoomDTO findByName(String name) throws IllegalArgumentException {
+        return convertToDto(conferenceRoomRepo.findById(name).orElseThrow(() -> new MyEntityNotFoundException("Conference room " + name + " has not been found")));
     }
 
 
-    public ConferenceRoom update(String name, ConferenceRoom conferenceRoom) throws IllegalArgumentException {
+    public ConferenceRoomDTO update(String name, ConferenceRoomDTO conferenceRoomDTO) throws IllegalArgumentException {
 
-        if (conferenceRoomRepo.findById(conferenceRoom.getName()).isPresent()) {
+        if (conferenceRoomRepo.findById(conferenceRoomDTO.getName()).isPresent()) {
             throw new MyEntityAlreadyExistsException("Conference room " + name + " already exists!");
         }
 
-        ConferenceRoom conferenceRoomToUpdate = findByName(name);
+        ConferenceRoom conferenceRoomToUpdate = convertToEntity(findByName(name));
 
-        conferenceRoomToUpdate.setName(conferenceRoom.getName());
-        conferenceRoomToUpdate.setNumberOfSeats(conferenceRoom.getNumberOfSeats());
-        conferenceRoomToUpdate.setAvailable(conferenceRoom.isAvailable());
-        conferenceRoomToUpdate.setFloor(conferenceRoom.getFloor());
-        conferenceRoomToUpdate.setCommunicationInterface(conferenceRoom.getCommunicationInterface());
-        conferenceRoomToUpdate.setExternalPhoneNumber(conferenceRoom.getExternalPhoneNumber());
-        conferenceRoomToUpdate.setInternalPhoneNumber(conferenceRoom.getInternalPhoneNumber());
-        conferenceRoomToUpdate.setProjector(conferenceRoom.getProjector());
-        conferenceRoomToUpdate.setNumberOfLyingPlace(conferenceRoom.getNumberOfLyingPlace());
-        conferenceRoomToUpdate.setNumberOfStandingPlace(conferenceRoom.getNumberOfStandingPlace());
-        conferenceRoomToUpdate.setPhonePresent(conferenceRoom.isPhonePresent());
+        conferenceRoomToUpdate.setName(conferenceRoomDTO.getName());
+        conferenceRoomToUpdate.setNumberOfSeats(conferenceRoomDTO.getNumberOfSeats());
+        conferenceRoomToUpdate.setAvailable(conferenceRoomDTO.getAvailable());
+        conferenceRoomToUpdate.setFloor(conferenceRoomDTO.getFloor());
+        conferenceRoomToUpdate.setCommunicationInterface(conferenceRoomDTO.getCommunicationInterface());
+        conferenceRoomToUpdate.setExternalPhoneNumber(conferenceRoomDTO.getExternalPhoneNumber());
+        conferenceRoomToUpdate.setInternalPhoneNumber(conferenceRoomDTO.getInternalPhoneNumber());
+        conferenceRoomToUpdate.setProjector(conferenceRoomDTO.getProjector());
+        conferenceRoomToUpdate.setNumberOfLyingPlace(conferenceRoomDTO.getNumberOfLyingPlace());
+        conferenceRoomToUpdate.setNumberOfStandingPlace(conferenceRoomDTO.getNumberOfStandingPlace());
+        conferenceRoomToUpdate.setPhonePresent(conferenceRoomDTO.getPhonePresent());
 
-        return conferenceRoomRepo.save(conferenceRoomToUpdate);
+        return convertToDto(conferenceRoomRepo.save(conferenceRoomToUpdate));
     }
 
 
     public void delete(String name) throws IllegalArgumentException {
 
-        conferenceRoomRepo.delete(findByName(name));
+        conferenceRoomRepo.delete(convertToEntity(findByName(name)));
+    }
+
+    private ConferenceRoomDTO convertToDto(ConferenceRoom conferenceRoom) {
+        return objectMapper.convertValue(conferenceRoom, ConferenceRoomDTO.class);
+    }
+
+    private ConferenceRoom convertToEntity(ConferenceRoomDTO conferenceRoomDTO) {
+        return objectMapper.convertValue(conferenceRoomDTO, ConferenceRoom.class);
     }
 }

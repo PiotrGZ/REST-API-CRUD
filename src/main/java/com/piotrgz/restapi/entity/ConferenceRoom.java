@@ -32,43 +32,43 @@ public class ConferenceRoom {
         this.name = name;
     }
 
-    public int getFloor() {
+    public Integer getFloor() {
         return floor;
     }
 
-    public void setFloor(int floor) {
+    public void setFloor(Integer floor) {
         this.floor = floor;
     }
 
-    public boolean isAvailable() {
+    public Boolean getAvailable() {
         return available;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(Boolean available) {
         this.available = available;
     }
 
-    public int getNumberOfSeats() {
+    public Integer getNumberOfSeats() {
         return numberOfSeats;
     }
 
-    public void setNumberOfSeats(int numberOfSeats) {
+    public void setNumberOfSeats(Integer numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
     }
 
-    public int getNumberOfStandingPlace() {
+    public Integer getNumberOfStandingPlace() {
         return numberOfStandingPlace;
     }
 
-    public void setNumberOfStandingPlace(int numberOfStandingPlace) {
+    public void setNumberOfStandingPlace(Integer numberOfStandingPlace) {
         this.numberOfStandingPlace = numberOfStandingPlace;
     }
 
-    public int getNumberOfLyingPlace() {
+    public Integer getNumberOfLyingPlace() {
         return numberOfLyingPlace;
     }
 
-    public void setNumberOfLyingPlace(int numberOfLyingPlace) {
+    public void setNumberOfLyingPlace(Integer numberOfLyingPlace) {
         this.numberOfLyingPlace = numberOfLyingPlace;
     }
 
@@ -80,19 +80,19 @@ public class ConferenceRoom {
         this.projector = projector;
     }
 
-    public boolean isPhonePresent() {
+    public Boolean getPhonePresent() {
         return isPhonePresent;
     }
 
-    public void setPhonePresent(boolean phonePresent) {
+    public void setPhonePresent(Boolean phonePresent) {
         isPhonePresent = phonePresent;
     }
 
-    public int getInternalPhoneNumber() {
+    public Integer getInternalPhoneNumber() {
         return internalPhoneNumber;
     }
 
-    public void setInternalPhoneNumber(int internalPhoneNumber) {
+    public void setInternalPhoneNumber(Integer internalPhoneNumber) {
         this.internalPhoneNumber = internalPhoneNumber;
     }
 
