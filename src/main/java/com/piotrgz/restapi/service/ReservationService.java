@@ -32,8 +32,8 @@ public class ReservationService {
         if (reservationRepository.findById(reservationDTO.getName()).isPresent()) {
             throw new EntityAlreadyExistsException("Reservation with name " + reservationDTO.getName() + " already exists!");
         }
-        reservationDTO.getOrganizationName().equals(organizationService.findByName(reservationDTO.getOrganizationName()));
-        reservationDTO.getConferenceRoomName().equals(conferenceRoomService.findByName(reservationDTO.getConferenceRoomName()));
+        organizationService.findByName(reservationDTO.getOrganizationName());
+        conferenceRoomService.findByName(reservationDTO.getConferenceRoomName());
         return convertToDto(reservationRepository.save(convertToEntity(reservationDTO)));
     }
 
@@ -50,8 +50,8 @@ public class ReservationService {
             throw new EntityAlreadyExistsException("Reservation with name " + name + " already exists!");
         }
 
-        reservationDTO.getOrganizationName().equals(organizationService.findByName(reservationDTO.getOrganizationName()));
-        reservationDTO.getConferenceRoomName().equals(conferenceRoomService.findByName(reservationDTO.getConferenceRoomName()));
+        organizationService.findByName(reservationDTO.getOrganizationName());
+        conferenceRoomService.findByName(reservationDTO.getConferenceRoomName());
         Reservation reservationToUpdate = convertToEntity(findByName(name));
 
         reservationToUpdate.setName(reservationDTO.getName());
