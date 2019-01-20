@@ -1,16 +1,17 @@
 package com.piotrgz.restapi.entity;
 
-
 import javax.persistence.*;
-
 
 @Entity
 public class ConferenceRoom {
 
     @Id
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private Integer floor;
     private Boolean available;
+    @Column(nullable = false)
     private Integer numberOfSeats;
     private Integer numberOfStandingPlace;
     private Integer numberOfLyingPlace;
@@ -19,7 +20,6 @@ public class ConferenceRoom {
     private Integer internalPhoneNumber;
     private String externalPhoneNumber;
     private String communicationInterface;
-
 
     public ConferenceRoom() {
     }

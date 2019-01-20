@@ -1,69 +1,59 @@
 package com.piotrgz.restapi.service;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.piotrgz.restapi.exceptions.MyEntityAlreadyExistsException;
+import com.piotrgz.restapi.exceptions.EntityAlreadyExistsException;
 import com.piotrgz.restapi.entity.Organization;
+import com.piotrgz.restapi.exceptions.EntityNotFoundException;
 import com.piotrgz.restapi.model.OrganizationDTO;
-import com.piotrgz.restapi.repository.OrganizationRepo;
+import com.piotrgz.restapi.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-
 @Service
 public class OrganizationService {
 
-    private OrganizationRepo organizationRepo;
+    private OrganizationRepository organizationRepository;
     private ObjectMapper objectMapper;
 
     @Autowired
-    public OrganizationService(OrganizationRepo organizationRepository, ObjectMapper objectMapper) {
-        this.organizationRepo = Objects.requireNonNull(organizationRepository);
+    public OrganizationService(OrganizationRepository organizationRepository, ObjectMapper objectMapper) {
+        this.organizationRepository = Objects.requireNonNull(organizationRepository);
         this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
-    public OrganizationDTO save(OrganizationDTO organizationDTO) throws IllegalArgumentException {
-
-        if (organizationRepo.findById(organizationDTO.getName()).isPresent()) {
-            throw new MyEntityAlreadyExistsException("Organization with name: " + organizationDTO.getName() + " already exists");
+    public OrganizationDTO save(OrganizationDTO organizationDTO) {
+        if (organizationRepository.findById(organizationDTO.getName()).isPresent()) {
+            throw new EntityAlreadyExistsException("Organization with name: " + organizationDTO.getName() + " already exists");
         }
-        return convertToDto(organizationRepo.save(convertToEntity(organizationDTO)));
+        return convertToDto(organizationRepository.save(convertToEntity(organizationDTO)));
     }
 
     public Iterable<OrganizationDTO> getAll() {
-        Stream<OrganizationDTO> stream = StreamSupport.stream(organizationRepo.findAll().spliterator(), false)
-                .map(organization -> convertToDto(organization));
-
+        Stream<OrganizationDTO> stream = StreamSupport.stream(organizationRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization));
         return stream::iterator;
     }
 
-
-    public OrganizationDTO findByName(String name) throws IllegalArgumentException {
-        return convertToDto(organizationRepo.findById(name).orElseThrow(() -> new EntityNotFoundException("Organization with name: " + name + " was not found")));
+    public OrganizationDTO findByName(String name) {
+        return convertToDto(organizationRepository.findById(name).orElseThrow(() -> new EntityNotFoundException("Organization with name: " + name + " was not found")));
     }
 
-
-    public OrganizationDTO update(String name, OrganizationDTO organizationDTO) throws IllegalArgumentException {
-
-        if (organizationRepo.findById(organizationDTO.getName()).isPresent()) {
-            throw new MyEntityAlreadyExistsException("Organization with name " + name + " already exists!");
+    public OrganizationDTO update(String name, OrganizationDTO organizationDTO) {
+        if (organizationRepository.findById(organizationDTO.getName()).isPresent()) {
+            throw new EntityAlreadyExistsException("Organization with name " + name + " already exists!");
         }
 
         Organization organizationToUpdate = convertToEntity(findByName(name));
 
         organizationToUpdate.setName(organizationDTO.getName());
-        return convertToDto(organizationRepo.save(organizationToUpdate));
+        return convertToDto(organizationRepository.save(organizationToUpdate));
     }
 
-
-    public void delete(String name) throws IllegalArgumentException {
-
-        organizationRepo.delete(convertToEntity(findByName(name)));
+    public void delete(String name) {
+        organizationRepository.delete(convertToEntity(findByName(name)));
     }
 
     private OrganizationDTO convertToDto(Organization organization) {

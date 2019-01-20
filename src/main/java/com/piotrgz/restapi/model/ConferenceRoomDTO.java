@@ -27,9 +27,6 @@ public class ConferenceRoomDTO {
     @Pattern(regexp = "USB|bluetooth", message = "Available communication interfaces are USB or bluetooth")
     private String communicationInterface;
 
-    public ConferenceRoomDTO() {
-    }
-
     public String getName() {
         return name;
     }

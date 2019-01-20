@@ -1,10 +1,9 @@
 package com.piotrgz.restapi.repository;
 
-
-import com.piotrgz.restapi.entity.Organization;
+import com.piotrgz.restapi.entity.ConferenceRoom;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrganizationRepo extends CrudRepository<Organization, String> {
+public interface ConferenceRoomRepository extends CrudRepository<ConferenceRoom, String> {
 }

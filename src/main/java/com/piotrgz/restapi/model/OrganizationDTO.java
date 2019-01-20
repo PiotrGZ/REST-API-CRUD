@@ -9,9 +9,6 @@ public class OrganizationDTO {
     @Size(min = 2, max = 20, message = "Please provide name in range of 2-20 characters")
     private String name;
 
-    public OrganizationDTO() {
-    }
-
     public String getName() {
         return name;
     }

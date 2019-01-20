@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class MyEntityNotFoundException extends IllegalArgumentException {
+public class EntityNotFoundException extends IllegalArgumentException {
 
-    public MyEntityNotFoundException(String message) {
+    public EntityNotFoundException(String message) {
         super(message);
     }
 }

@@ -1,7 +1,7 @@
 package com.piotrgz.restapi.model;
 
-
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -20,12 +20,11 @@ public class ReservationDTO {
     @Size(min = 2, max = 20, message = "Please provide conference room name in range of 2-20 characters")
     private String conferenceRoomName;
     @NotNull(message = "Please enter start date")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startDate;
     @NotNull(message = "Please enter end date")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime endDate;
-
-    public ReservationDTO() {
-    }
 
     public String getName() {
         return name;

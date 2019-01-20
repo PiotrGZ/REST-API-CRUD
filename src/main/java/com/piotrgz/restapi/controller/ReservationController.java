@@ -1,7 +1,5 @@
 package com.piotrgz.restapi.controller;
 
-
-
 import com.piotrgz.restapi.model.ReservationDTO;
 import com.piotrgz.restapi.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +11,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
-
-
     private ReservationService reservationService;
-
 
     @Autowired
     public ReservationController(ReservationService reservationService) {
@@ -24,7 +19,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ReservationDTO save(@Valid @RequestBody ReservationDTO reservationDTO) throws IllegalArgumentException {
+    public ReservationDTO save(@Valid @RequestBody ReservationDTO reservationDTO) {
         return reservationService.save(reservationDTO);
     }
 
@@ -34,19 +29,17 @@ public class ReservationController {
     }
 
     @GetMapping("/{name}")
-    public ReservationDTO findByName(@PathVariable("name") String name) throws IllegalArgumentException {
-           return reservationService.findByName(name);
+    public ReservationDTO findByName(@PathVariable("name") String name) {
+        return reservationService.findByName(name);
     }
-
 
     @DeleteMapping("/{name}")
-    public void delete(@PathVariable("name") String name) throws IllegalArgumentException {
-            reservationService.delete(name);
+    public void delete(@PathVariable("name") String name) {
+        reservationService.delete(name);
     }
 
-
     @PutMapping("/{name}")
-    public ReservationDTO update(@PathVariable String name, @Valid @RequestBody ReservationDTO reservationDTO) throws IllegalArgumentException{
-            return reservationService.update(name, reservationDTO);
+    public ReservationDTO update(@PathVariable String name, @Valid @RequestBody ReservationDTO reservationDTO) {
+        return reservationService.update(name, reservationDTO);
     }
 }

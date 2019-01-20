@@ -1,7 +1,5 @@
 package com.piotrgz.restapi.controller;
 
-
-
 import com.piotrgz.restapi.model.ConferenceRoomDTO;
 import com.piotrgz.restapi.service.ConferenceRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Objects;
 
-
 @RestController
 @RequestMapping("/conferencerooms")
 public class ConferenceRoomController {
-
     private ConferenceRoomService conferenceRoomService;
 
     @Autowired
@@ -23,7 +19,7 @@ public class ConferenceRoomController {
     }
 
     @PostMapping
-    public ConferenceRoomDTO save(@Valid @RequestBody ConferenceRoomDTO conferenceRoomDTO) throws IllegalArgumentException {
+    public ConferenceRoomDTO save(@Valid @RequestBody ConferenceRoomDTO conferenceRoomDTO) {
         return conferenceRoomService.save(conferenceRoomDTO);
     }
 
@@ -33,19 +29,17 @@ public class ConferenceRoomController {
     }
 
     @GetMapping("/{name}")
-    public ConferenceRoomDTO findByName(@PathVariable("name") String name) throws IllegalArgumentException {
+    public ConferenceRoomDTO findByName(@PathVariable("name") String name) {
         return conferenceRoomService.findByName(name);
     }
 
-
     @DeleteMapping("/{name}")
-    public void delete(@PathVariable("name") String name) throws IllegalArgumentException {
+    public void delete(@PathVariable("name") String name) {
         conferenceRoomService.delete(name);
     }
 
-
     @PutMapping("/{name}")
-    public ConferenceRoomDTO update(@PathVariable String name, @Valid @RequestBody ConferenceRoomDTO conferenceRoomDTO) throws IllegalArgumentException {
+    public ConferenceRoomDTO update(@PathVariable String name, @Valid @RequestBody ConferenceRoomDTO conferenceRoomDTO) {
         return conferenceRoomService.update(name, conferenceRoomDTO);
     }
 }

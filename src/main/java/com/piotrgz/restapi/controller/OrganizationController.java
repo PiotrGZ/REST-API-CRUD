@@ -1,20 +1,16 @@
 package com.piotrgz.restapi.controller;
 
-
 import com.piotrgz.restapi.model.OrganizationDTO;
 import com.piotrgz.restapi.service.OrganizationService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Objects;
 
-
 @RestController
 @RequestMapping("/organizations")
 public class OrganizationController {
-
     private OrganizationService organizationService;
 
     @Autowired
@@ -23,7 +19,7 @@ public class OrganizationController {
     }
 
     @PostMapping
-    public OrganizationDTO save(@Valid @RequestBody OrganizationDTO organizationDTO) throws IllegalArgumentException {
+    public OrganizationDTO save(@Valid @RequestBody OrganizationDTO organizationDTO) {
         return organizationService.save(organizationDTO);
     }
 
@@ -33,19 +29,17 @@ public class OrganizationController {
     }
 
     @GetMapping("/{name}")
-    public OrganizationDTO findByName(@PathVariable("name") String name) throws IllegalArgumentException {
+    public OrganizationDTO findByName(@PathVariable("name") String name) {
         return (organizationService.findByName(name));
     }
 
-
     @DeleteMapping("/{name}")
-    public void delete(@PathVariable("name") String name) throws IllegalArgumentException {
+    public void delete(@PathVariable("name") String name) {
         organizationService.delete(name);
     }
 
-
     @PutMapping("/{name}")
-    public OrganizationDTO update(@PathVariable String name, @Valid @RequestBody OrganizationDTO organizationDTO) throws IllegalArgumentException {
+    public OrganizationDTO update(@PathVariable String name, @Valid @RequestBody OrganizationDTO organizationDTO) {
         return (organizationService.update(name, organizationDTO));
     }
 }

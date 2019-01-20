@@ -1,12 +1,10 @@
 package com.piotrgz.restapi.entity;
 
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 public class Reservation {
-
 
     @Id
     private String name;
@@ -14,10 +12,6 @@ public class Reservation {
     private String conferenceRoomName;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-
-
-    public Reservation() {
-    }
 
     public String getOrganizationName() {
         return organizationName;
@@ -35,6 +29,14 @@ public class Reservation {
         this.conferenceRoomName = conferenceRoomName;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public LocalDateTime getStartDate() {
         return startDate;
     }
@@ -49,13 +51,5 @@ public class Reservation {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

@@ -1,61 +1,50 @@
 package com.piotrgz.restapi.service;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.piotrgz.restapi.exceptions.MyEntityAlreadyExistsException;
-import com.piotrgz.restapi.exceptions.MyEntityNotFoundException;
+import com.piotrgz.restapi.exceptions.EntityAlreadyExistsException;
+import com.piotrgz.restapi.exceptions.EntityNotFoundException;
 import com.piotrgz.restapi.entity.ConferenceRoom;
 import com.piotrgz.restapi.model.ConferenceRoomDTO;
-import com.piotrgz.restapi.repository.ConferenceRoomRepo;
+import com.piotrgz.restapi.repository.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-
 @Service
 public class ConferenceRoomService {
 
-    private ConferenceRoomRepo conferenceRoomRepo;
+    private ConferenceRoomRepository conferenceRoomRepository;
     private ObjectMapper objectMapper;
 
     @Autowired
-    public ConferenceRoomService(ConferenceRoomRepo conferenceRoomRepo, ObjectMapper objectMapper) {
-        this.conferenceRoomRepo = Objects.requireNonNull(conferenceRoomRepo);
+    public ConferenceRoomService(ConferenceRoomRepository conferenceRoomRepository, ObjectMapper objectMapper) {
+        this.conferenceRoomRepository = Objects.requireNonNull(conferenceRoomRepository);
         this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
-    public ConferenceRoomDTO save(ConferenceRoomDTO conferenceRoomDTO) throws IllegalArgumentException {
-
-        if (conferenceRoomRepo.findById(conferenceRoomDTO.getName()).isPresent()) {
-            throw new MyEntityAlreadyExistsException("Conference room with name " + conferenceRoomDTO.getName() + " already exists!");
+    public ConferenceRoomDTO save(ConferenceRoomDTO conferenceRoomDTO) {
+        if (conferenceRoomRepository.findById(conferenceRoomDTO.getName()).isPresent()) {
+            throw new EntityAlreadyExistsException("Conference room with name " + conferenceRoomDTO.getName() + " already exists!");
         }
-        return convertToDto(conferenceRoomRepo.save(convertToEntity(conferenceRoomDTO)));
+        return convertToDto(conferenceRoomRepository.save(convertToEntity(conferenceRoomDTO)));
     }
 
     public Iterable<ConferenceRoomDTO> getAll() {
-
-        Stream<ConferenceRoomDTO> stream = StreamSupport.stream(conferenceRoomRepo.findAll().spliterator(), false)
-                .map(organization -> convertToDto(organization));
-
+        Stream<ConferenceRoomDTO> stream = StreamSupport.stream(conferenceRoomRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization));
         return stream::iterator;
     }
 
-
-    public ConferenceRoomDTO findByName(String name) throws IllegalArgumentException {
-        return convertToDto(conferenceRoomRepo.findById(name).orElseThrow(() -> new MyEntityNotFoundException("Conference room " + name + " has not been found")));
+    public ConferenceRoomDTO findByName(String name) {
+        return convertToDto(conferenceRoomRepository.findById(name).orElseThrow(() -> new EntityNotFoundException("Conference room " + name + " has not been found")));
     }
 
-
-    public ConferenceRoomDTO update(String name, ConferenceRoomDTO conferenceRoomDTO) throws IllegalArgumentException {
-
-        if (conferenceRoomRepo.findById(conferenceRoomDTO.getName()).isPresent()) {
-            throw new MyEntityAlreadyExistsException("Conference room " + name + " already exists!");
+    public ConferenceRoomDTO update(String name, ConferenceRoomDTO conferenceRoomDTO) {
+        if (conferenceRoomRepository.findById(conferenceRoomDTO.getName()).isPresent()) {
+            throw new EntityAlreadyExistsException("Conference room " + name + " already exists!");
         }
-
         ConferenceRoom conferenceRoomToUpdate = convertToEntity(findByName(name));
 
         conferenceRoomToUpdate.setName(conferenceRoomDTO.getName());
@@ -70,13 +59,11 @@ public class ConferenceRoomService {
         conferenceRoomToUpdate.setNumberOfStandingPlace(conferenceRoomDTO.getNumberOfStandingPlace());
         conferenceRoomToUpdate.setPhonePresent(conferenceRoomDTO.getPhonePresent());
 
-        return convertToDto(conferenceRoomRepo.save(conferenceRoomToUpdate));
+        return convertToDto(conferenceRoomRepository.save(conferenceRoomToUpdate));
     }
 
-
-    public void delete(String name) throws IllegalArgumentException {
-
-        conferenceRoomRepo.delete(convertToEntity(findByName(name)));
+    public void delete(String name) {
+        conferenceRoomRepository.delete(convertToEntity(findByName(name)));
     }
 
     private ConferenceRoomDTO convertToDto(ConferenceRoom conferenceRoom) {

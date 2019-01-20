@@ -1,12 +1,11 @@
 package com.piotrgz.restapi.service;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.piotrgz.restapi.exceptions.MyEntityAlreadyExistsException;
-import com.piotrgz.restapi.exceptions.MyEntityNotFoundException;
+import com.piotrgz.restapi.exceptions.EntityAlreadyExistsException;
+import com.piotrgz.restapi.exceptions.EntityNotFoundException;
 import com.piotrgz.restapi.entity.Reservation;
 import com.piotrgz.restapi.model.ReservationDTO;
-import com.piotrgz.restapi.repository.ReservationRepo;
+import com.piotrgz.restapi.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,50 +16,38 @@ import java.util.stream.StreamSupport;
 @Service
 public class ReservationService {
 
-    private ReservationRepo reservationRepo;
+    private ReservationRepository reservationRepository;
     private OrganizationService organizationService;
     private ConferenceRoomService conferenceRoomService;
-    private ObjectMapper objectMapper;
-
-
 
     @Autowired
-    public ReservationService(ReservationRepo reservationRepo, OrganizationService organizationService, ConferenceRoomService conferenceRoomService, ObjectMapper objectMapper) {
-        this.reservationRepo = Objects.requireNonNull(reservationRepo);
+    public ReservationService(ReservationRepository reservationRepository, OrganizationService organizationService, ConferenceRoomService conferenceRoomService, ObjectMapper objectMapper) {
+        this.reservationRepository = Objects.requireNonNull(reservationRepository);
         this.organizationService = Objects.requireNonNull(organizationService);
         this.conferenceRoomService = Objects.requireNonNull(conferenceRoomService);
-        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
-    public ReservationDTO save(ReservationDTO reservationDTO) throws IllegalArgumentException {
-
-        if (reservationRepo.findById(reservationDTO.getName()).isPresent()) {
-            throw new MyEntityAlreadyExistsException("Reservation with name " + reservationDTO.getName() + " already exists!");
+    public ReservationDTO save(ReservationDTO reservationDTO) {
+        if (reservationRepository.findById(reservationDTO.getName()).isPresent()) {
+            throw new EntityAlreadyExistsException("Reservation with name " + reservationDTO.getName() + " already exists!");
         }
-
         reservationDTO.getOrganizationName().equals(organizationService.findByName(reservationDTO.getOrganizationName()));
         reservationDTO.getConferenceRoomName().equals(conferenceRoomService.findByName(reservationDTO.getConferenceRoomName()));
-
-        return convertToDto(reservationRepo.save(convertToEntity(reservationDTO)));
+        return convertToDto(reservationRepository.save(convertToEntity(reservationDTO)));
     }
 
     public Iterable<ReservationDTO> getAll() {
-        Stream<ReservationDTO> stream = StreamSupport.stream(reservationRepo.findAll().spliterator(), false)
-                .map(reservation -> convertToDto(reservation));
-
+        Stream<ReservationDTO> stream = StreamSupport.stream(reservationRepository.findAll().spliterator(), false).map(reservation -> convertToDto(reservation));
         return stream::iterator;
     }
 
-
-    public ReservationDTO findByName(String name) throws IllegalArgumentException {
-        return convertToDto(reservationRepo.findById(name).orElseThrow(() -> new MyEntityNotFoundException("Reservation " + name + " has not been found")));
+    public ReservationDTO findByName(String name) {
+        return convertToDto(reservationRepository.findById(name).orElseThrow(() -> new EntityNotFoundException("Reservation " + name + " has not been found")));
     }
 
-
-    public ReservationDTO update(String name, ReservationDTO reservationDTO) throws IllegalArgumentException {
-
-        if (reservationRepo.findById(reservationDTO.getName()).isPresent()) {
-            throw new MyEntityAlreadyExistsException("Reservation with name " + name + " already exists!");
+    public ReservationDTO update(String name, ReservationDTO reservationDTO) {
+        if (reservationRepository.findById(reservationDTO.getName()).isPresent()) {
+            throw new EntityAlreadyExistsException("Reservation with name " + name + " already exists!");
         }
 
         reservationDTO.getOrganizationName().equals(organizationService.findByName(reservationDTO.getOrganizationName()));
@@ -73,20 +60,31 @@ public class ReservationService {
         reservationToUpdate.setOrganizationName(reservationDTO.getOrganizationName());
         reservationToUpdate.setConferenceRoomName(reservationDTO.getConferenceRoomName());
 
-        return convertToDto(reservationRepo.save(reservationToUpdate));
+        return convertToDto(reservationRepository.save(reservationToUpdate));
     }
 
+    public void delete(String name) {
 
-    public void delete(String name) throws IllegalArgumentException {
-
-        reservationRepo.delete(convertToEntity(findByName(name)));
+        reservationRepository.delete(convertToEntity(findByName(name)));
     }
 
     private ReservationDTO convertToDto(Reservation reservation) {
-        return objectMapper.convertValue(reservation, ReservationDTO.class);
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setConferenceRoomName(reservation.getConferenceRoomName());
+        reservationDTO.setOrganizationName(reservation.getOrganizationName());
+        reservationDTO.setName(reservation.getName());
+        reservationDTO.setEndDate(reservation.getEndDate());
+        reservationDTO.setStartDate(reservation.getStartDate());
+        return reservationDTO;
     }
 
     private Reservation convertToEntity(ReservationDTO reservationDTO) {
-        return objectMapper.convertValue(reservationDTO, Reservation.class);
+        Reservation reservation = new Reservation();
+        reservation.setConferenceRoomName(reservationDTO.getConferenceRoomName());
+        reservation.setOrganizationName(reservationDTO.getOrganizationName());
+        reservation.setName(reservationDTO.getName());
+        reservation.setEndDate(reservationDTO.getEndDate());
+        reservation.setStartDate(reservationDTO.getStartDate());
+        return reservation;
     }
 }
