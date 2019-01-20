@@ -18,6 +18,6 @@
          
     c) Przykładowe dodanie Reservation
     
-        curl -X POST http://localhost:8080/reservations -H 'content-type: application/json' -d '{"conferenceRoomName": "Room", "endDate": "2019-01-20T12:30:33.490Z", "name": "Reservation", "organizationName": "Organization", "startDate": "2019-01-20T12:30:33.490Z"}'
+        curl -X POST http://localhost:8080/reservations -H 'content-type: application/json' -d '{"conferenceRoomName": "Room", "endDate": "2019-02-20T12:50:33.490Z", "name": "Reservation", "organizationName": "Organization", "startDate": "2019-02-20T12:30:33.490Z"}'
     
         
