@@ -9,8 +9,9 @@ import com.piotrgz.restapi.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -36,9 +37,8 @@ public class ReservationService {
         return convertToDto(reservationRepository.save(convertToEntity(reservationDTO)));
     }
 
-    public Iterable<ReservationDTO> getAll() {
-        Stream<ReservationDTO> stream = StreamSupport.stream(reservationRepository.findAll().spliterator(), false).map(reservation -> convertToDto(reservation));
-        return stream::iterator;
+    public List<ReservationDTO> getAll() {
+        return StreamSupport.stream(reservationRepository.findAll().spliterator(), false).map(reservation -> convertToDto(reservation)).collect(Collectors.toList());
     }
 
     public ReservationDTO findByName(String name) {

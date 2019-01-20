@@ -9,8 +9,9 @@ import com.piotrgz.restapi.repository.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -32,9 +33,8 @@ public class ConferenceRoomService {
         return convertToDto(conferenceRoomRepository.save(convertToEntity(conferenceRoomDTO)));
     }
 
-    public Iterable<ConferenceRoomDTO> getAll() {
-        Stream<ConferenceRoomDTO> stream = StreamSupport.stream(conferenceRoomRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization));
-        return stream::iterator;
+    public List<ConferenceRoomDTO> getAll() {
+       return StreamSupport.stream(conferenceRoomRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization)).collect(Collectors.toList());
     }
 
     public ConferenceRoomDTO findByName(String name) {

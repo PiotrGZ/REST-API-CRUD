@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -24,7 +25,7 @@ public class ConferenceRoomController {
     }
 
     @GetMapping
-    public Iterable<ConferenceRoomDTO> getAll() {
+    public List<ConferenceRoomDTO> getAll() {
         return conferenceRoomService.getAll();
     }
 

@@ -9,8 +9,9 @@ import com.piotrgz.restapi.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -32,9 +33,8 @@ public class OrganizationService {
         return convertToDto(organizationRepository.save(convertToEntity(organizationDTO)));
     }
 
-    public Iterable<OrganizationDTO> getAll() {
-        Stream<OrganizationDTO> stream = StreamSupport.stream(organizationRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization));
-        return stream::iterator;
+    public List<OrganizationDTO> getAll() {
+        return StreamSupport.stream(organizationRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization)).collect(Collectors.toList());
     }
 
     public OrganizationDTO findByName(String name) {
