@@ -23,10 +23,17 @@ repositories {
     mavenCentral()
 }
 
+bootJar{
+    mainClassName= 'com.piotrgz.restapi.RestapiApplication'
+}
+
 
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     runtime('com.h2database:h2')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.0.2'
+
 }
