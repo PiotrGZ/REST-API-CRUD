@@ -1,9 +1,9 @@
 package com.piotrgz.restapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.piotrgz.restapi.entity.ConferenceRoom;
 import com.piotrgz.restapi.exceptions.EntityAlreadyExistsException;
 import com.piotrgz.restapi.exceptions.EntityNotFoundException;
-import com.piotrgz.restapi.entity.ConferenceRoom;
 import com.piotrgz.restapi.model.ConferenceRoomDTO;
 import com.piotrgz.restapi.repository.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class ConferenceRoomService {
     }
 
     public List<ConferenceRoomDTO> getAll() {
-       return StreamSupport.stream(conferenceRoomRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization)).collect(Collectors.toList());
+        return StreamSupport.stream(conferenceRoomRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization)).collect(Collectors.toList());
     }
 
     public ConferenceRoomDTO findByName(String name) {

@@ -1,8 +1,8 @@
 package com.piotrgz.restapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.piotrgz.restapi.exceptions.EntityAlreadyExistsException;
 import com.piotrgz.restapi.entity.Organization;
+import com.piotrgz.restapi.exceptions.EntityAlreadyExistsException;
 import com.piotrgz.restapi.exceptions.EntityNotFoundException;
 import com.piotrgz.restapi.model.OrganizationDTO;
 import com.piotrgz.restapi.repository.OrganizationRepository;

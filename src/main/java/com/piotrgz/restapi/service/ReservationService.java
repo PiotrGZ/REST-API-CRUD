@@ -1,9 +1,9 @@
 package com.piotrgz.restapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.piotrgz.restapi.entity.Reservation;
 import com.piotrgz.restapi.exceptions.EntityAlreadyExistsException;
 import com.piotrgz.restapi.exceptions.EntityNotFoundException;
-import com.piotrgz.restapi.entity.Reservation;
 import com.piotrgz.restapi.model.ReservationDTO;
 import com.piotrgz.restapi.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
