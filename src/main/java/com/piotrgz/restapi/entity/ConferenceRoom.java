@@ -23,9 +23,6 @@ public class ConferenceRoom {
     private String externalPhoneNumber;
     private String communicationInterface;
 
-    public ConferenceRoom() {
-    }
-
     public String getName() {
         return name;
     }

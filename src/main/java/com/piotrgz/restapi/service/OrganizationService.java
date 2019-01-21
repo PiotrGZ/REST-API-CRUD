@@ -1,29 +1,25 @@
 package com.piotrgz.restapi.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.piotrgz.restapi.entity.Organization;
 import com.piotrgz.restapi.exceptions.EntityAlreadyExistsException;
 import com.piotrgz.restapi.exceptions.EntityNotFoundException;
 import com.piotrgz.restapi.model.OrganizationDTO;
 import com.piotrgz.restapi.repository.OrganizationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class OrganizationService {
 
-    private OrganizationRepository organizationRepository;
-    private ObjectMapper objectMapper;
+    private final OrganizationRepository organizationRepository;
 
-    @Autowired
-    public OrganizationService(OrganizationRepository organizationRepository, ObjectMapper objectMapper) {
+    private OrganizationService(OrganizationRepository organizationRepository) {
         this.organizationRepository = Objects.requireNonNull(organizationRepository);
-        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     public OrganizationDTO save(OrganizationDTO organizationDTO) {
@@ -34,7 +30,7 @@ public class OrganizationService {
     }
 
     public List<OrganizationDTO> getAll() {
-        return StreamSupport.stream(organizationRepository.findAll().spliterator(), false).map(organization -> convertToDto(organization)).collect(Collectors.toList());
+        return Lists.newArrayList(organizationRepository.findAll()).stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     public OrganizationDTO findByName(String name) {
@@ -47,8 +43,8 @@ public class OrganizationService {
         }
 
         Organization organizationToUpdate = convertToEntity(findByName(name));
+        BeanUtils.copyProperties(organizationDTO, organizationToUpdate);
 
-        organizationToUpdate.setName(organizationDTO.getName());
         return convertToDto(organizationRepository.save(organizationToUpdate));
     }
 
@@ -57,10 +53,14 @@ public class OrganizationService {
     }
 
     private OrganizationDTO convertToDto(Organization organization) {
-        return objectMapper.convertValue(organization, OrganizationDTO.class);
+        OrganizationDTO organizationDTO = new OrganizationDTO();
+        BeanUtils.copyProperties(organization, organizationDTO);
+        return organizationDTO;
     }
 
     private Organization convertToEntity(OrganizationDTO organizationDTO) {
-        return objectMapper.convertValue(organizationDTO, Organization.class);
+        Organization organization = new Organization();
+        BeanUtils.copyProperties(organizationDTO, organization);
+        return organization;
     }
 }

@@ -2,7 +2,6 @@ package com.piotrgz.restapi.controller;
 
 import com.piotrgz.restapi.model.OrganizationDTO;
 import com.piotrgz.restapi.service.OrganizationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -11,36 +10,35 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/organizations")
-public class OrganizationController {
-    private OrganizationService organizationService;
+class OrganizationController {
+    private final OrganizationService organizationService;
 
-    @Autowired
-    public OrganizationController(OrganizationService organizationService) {
+    private OrganizationController(OrganizationService organizationService) {
         this.organizationService = Objects.requireNonNull(organizationService);
     }
 
     @PostMapping
-    public OrganizationDTO save(@Valid @RequestBody OrganizationDTO organizationDTO) {
+    private OrganizationDTO save(@Valid @RequestBody OrganizationDTO organizationDTO) {
         return organizationService.save(organizationDTO);
     }
 
     @GetMapping
-    public List<OrganizationDTO> getAll() {
+    private List<OrganizationDTO> getAll() {
         return organizationService.getAll();
     }
 
     @GetMapping("/{name}")
-    public OrganizationDTO findByName(@PathVariable("name") String name) {
+    private OrganizationDTO findByName(@PathVariable("name") String name) {
         return (organizationService.findByName(name));
     }
 
     @DeleteMapping("/{name}")
-    public void delete(@PathVariable("name") String name) {
+    private void delete(@PathVariable("name") String name) {
         organizationService.delete(name);
     }
 
     @PutMapping("/{name}")
-    public OrganizationDTO update(@PathVariable String name, @Valid @RequestBody OrganizationDTO organizationDTO) {
+    private OrganizationDTO update(@PathVariable String name, @Valid @RequestBody OrganizationDTO organizationDTO) {
         return (organizationService.update(name, organizationDTO));
     }
 }
