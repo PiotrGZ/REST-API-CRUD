@@ -62,7 +62,7 @@ public class ReservationService {
         Reservation reservationToUpdate = convertToEntity(findByName(name));
         BeanUtils.copyProperties(reservationDTO, reservationToUpdate);
 
-        return convertToDto(reservationRepository.save(reservationToUpdate));
+        return save(convertToDto(reservationToUpdate));
     }
 
     public void delete(String name) {
