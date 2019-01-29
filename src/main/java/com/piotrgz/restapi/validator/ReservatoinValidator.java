@@ -8,7 +8,6 @@ import com.piotrgz.restapi.repository.ReservationRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ReservatoinValidator {
 
@@ -28,22 +27,33 @@ public class ReservatoinValidator {
         reservationDTO.setEndDate(endDateTrimmed);
     }
 
-    public void areEndAndStartDatesPassingValidationOrThrowException(ReservationDTO reservationDTO, LocalDateTime startDate, LocalDateTime endDate) {
+    public void isRoomFree(ReservationDTO reservationDTO, LocalDateTime startDate, LocalDateTime endDate) {
 
-        Optional.of(startDate).filter(t -> t.isBefore(endDate)).orElseThrow(() -> new TimeSetupException("Start date must be before end date"));
-        Optional.of(startDate).filter(t -> t.plusMinutes(MIN_RESERVATION_TIME_IN_MINUTES).isBefore(endDate) || t.plusMinutes(MIN_RESERVATION_TIME_IN_MINUTES).isEqual(endDate)).orElseThrow(() -> new TimeSetupException("Minimum reservation time is 5 minutes"));
-        Optional.of(startDate).filter(t -> t.plusHours(MAX_RESERVATION_TIME_IN_HRS).isAfter(endDate) || t.plusHours(MAX_RESERVATION_TIME_IN_HRS).isEqual(endDate)).orElseThrow(() -> new TimeSetupException("Maximum reservation time is 2 hours"));
+        List<Reservation> reservationsWithCollidingDuration = new ArrayList<>();
 
-        List<Reservation> reservationList = new ArrayList<>();
-        List<Reservation> allByConferenceRoomName = reservationRepository.findAllByConferenceRoomName(reservationDTO.getConferenceRoomName());
+        reservationRepository.findAllByConferenceRoomName(reservationDTO.getConferenceRoomName())
+                .stream()
+                .filter(t ->
+                        (startDate.isAfter(t.getStartDate()) && startDate.isBefore(t.getEndDate())) ||
+                        (endDate.isAfter(t.getStartDate()) && endDate.isBefore(t.getEndDate())) ||
+                        startDate.isEqual(t.getStartDate()) ||
+                        endDate.isEqual(t.getEndDate()))
+                .forEach(t -> reservationsWithCollidingDuration.add(t));
 
-        allByConferenceRoomName.stream().filter(t -> startDate.isAfter(t.getStartDate()) && startDate.isBefore(t.getEndDate())).forEach(t -> reservationList.add(t));
-        allByConferenceRoomName.stream().filter(t -> endDate.isAfter(t.getStartDate()) && endDate.isBefore(t.getEndDate())).forEach(t -> reservationList.add(t));
-        allByConferenceRoomName.stream().filter(t -> startDate.isEqual(t.getStartDate())).forEach(t -> reservationList.add(t));
-        allByConferenceRoomName.stream().filter(t -> endDate.isEqual(t.getEndDate())).forEach(t -> reservationList.add(t));
-
-        if (!reservationList.isEmpty()) {
+        if (!reservationsWithCollidingDuration.isEmpty()) {
             throw new TimeSetupException("Conference room is already booked at this time");
+        }
+    }
+
+    public void isDurationValid(LocalDateTime startDate, LocalDateTime endDate) {
+        if (startDate.isAfter(endDate)) {
+            throw new TimeSetupException("Start date must be before end date");
+        }
+        if (startDate.plusMinutes(MIN_RESERVATION_TIME_IN_MINUTES).isAfter(endDate)) {
+            throw new TimeSetupException("Minimum reservation time is 5 minutes");
+        }
+        if (startDate.plusHours(MAX_RESERVATION_TIME_IN_HRS).isBefore(endDate)) {
+            throw new TimeSetupException("Maximum reservation time is 2 hours");
         }
     }
 }

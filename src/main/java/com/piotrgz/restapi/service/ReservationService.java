@@ -26,7 +26,7 @@ public class ReservationService {
         this.reservationRepository = Objects.requireNonNull(reservationRepository);
         this.organizationService = Objects.requireNonNull(organizationService);
         this.conferenceRoomService = Objects.requireNonNull(conferenceRoomService);
-        this.reservatoinValidator=Objects.requireNonNull(new ReservatoinValidator(reservationRepository));
+        this.reservatoinValidator = new ReservatoinValidator(reservationRepository);
     }
 
     public ReservationDTO save(ReservationDTO reservationDTO) {
@@ -38,7 +38,8 @@ public class ReservationService {
         conferenceRoomService.findByName(reservationDTO.getConferenceRoomName());
 
         reservatoinValidator.trimSecondsAndNanoseconds(reservationDTO);
-        reservatoinValidator.areEndAndStartDatesPassingValidationOrThrowException(reservationDTO, reservationDTO.getStartDate(), reservationDTO.getEndDate());
+        reservatoinValidator.isDurationValid(reservationDTO.getStartDate(), reservationDTO.getEndDate());
+        reservatoinValidator.isRoomFree(reservationDTO, reservationDTO.getStartDate(), reservationDTO.getEndDate());
 
         return convertToDto(reservationRepository.save(convertToEntity(reservationDTO)));
     }
@@ -59,10 +60,10 @@ public class ReservationService {
 
         organizationService.findByName(reservationDTO.getOrganizationName());
         conferenceRoomService.findByName(reservationDTO.getConferenceRoomName());
-        Reservation reservationToUpdate = convertToEntity(findByName(name));
+        ReservationDTO reservationToUpdate = findByName(name);
         BeanUtils.copyProperties(reservationDTO, reservationToUpdate);
 
-        return save(convertToDto(reservationToUpdate));
+        return save(reservationToUpdate);
     }
 
     public void delete(String name) {
