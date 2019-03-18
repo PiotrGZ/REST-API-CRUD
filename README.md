@@ -1,7 +1,7 @@
 1. Będąc w docelowym katalogu, w ktorym mają znaleźć się pliki aplikacji należy uruchomic wiersz poleceń i wpisac następujące polecenia. Uwaga, należu upewnić się, ze port 8080 jest wolny.
 
         a) git init
-        b) git clone https://github.com/PiotrGZ/Zadanie-2---REST-API-CRUD.git
+        b) git clone https://github.com/PiotrGZ/REST-API-CRUD.git
         c) cd Zadanie-2---REST-API-CRUD
         d) gradlew bootJar
         e) java -jar build/libs/restapi-0.0.1-SNAPSHOT.jar
